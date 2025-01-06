@@ -1,8 +1,8 @@
 {
-  "realm": "uvtest1",
-  "auth-server-url": "https://login.dauth.me",
+  "realm": "nextjs-test",
+  "auth-server-url": "http://localhost:8080/",
   "ssl-required": "external",
-  "resource": "mytest",
+  "resource": "myclient",
   "public-client": true,
   "confidential-port": 0
 }
