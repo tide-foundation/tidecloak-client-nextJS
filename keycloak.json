@@ -1,0 +1,8 @@
+{
+  "realm": "uvtest1",
+  "auth-server-url": "https://login.dauth.me",
+  "ssl-required": "external",
+  "resource": "mytest",
+  "public-client": true,
+  "confidential-port": 0
+}
