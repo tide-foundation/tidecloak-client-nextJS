@@ -1,10 +1,11 @@
+// This is example for a secure (authenticated user only) page.
+// In this example, an authenticated user will be presented some sensitive data 
+// and will be allowed to query the server for sensitive information.
+
 import React, { useEffect, useState } from "react";
 import IAMService from "/lib/IAMService";
 
 export default function ProtectedPage() {
-  // This is example for a secure (authenticated user only) page.
-  // In this example, an authenticated user will be presented some sensitive data 
-  // and will be allowed to query the server for sensitive information.
   const [username, setUsername] = useState("unknown");
   const [hasUMARole, setHasUMARole] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
@@ -13,7 +14,7 @@ export default function ProtectedPage() {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
     IAMService.initIAM(() => {
       if (IAMService.isLoggedIn()) {
-		// An example on collecting user information to peform client side operations (i.e. present)
+	// An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
         setHasUMARole(IAMService.hasOneRole( 'uma_authorization' ));
       }
@@ -21,19 +22,19 @@ export default function ProtectedPage() {
   }, []);
 
   const handleLogout = () => {
-	// Allow and handle user log out
+    // Allow and handle user log out
     IAMService.doLogout();
   };
 
   const fetchEndpoint = async () => {
-	// An example for securely fetching information from resource server
+    // An example for securely fetching information from resource server
     try {
-	  const newToken = await IAMService.getToken();
-	  console.debug('[fetchEndpoint] Token valid for ' + IAMService.getTokenExp() + ' seconds');
+      const newToken = await IAMService.getToken();
+      console.debug('[fetchEndpoint] Token valid for ' + IAMService.getTokenExp() + ' seconds');
       const response = await fetch('/api/endpoint', {
         method: 'POST',
         headers: {
-		  accept: 'application/json',
+          accept: 'application/json',
           Authorization: `Bearer ${newToken}`, // Add the token to the Authorization header
         },
       });
