@@ -1,3 +1,5 @@
+// Home page
+
 import React, { useEffect } from "react";
 import IAMService from "/lib/IAMService";
 
@@ -6,14 +8,14 @@ export default function HomePage() {
   useEffect(() => {
     IAMService.initIAM((authenticated) => {
       if (authenticated) {
-		// If already authenticated, skip authentication
+        // If already authenticated, skip screen
         window.location.href = "/auth/redirect";
       }
     });
   }, []);
 
   const handleLogin = () => {
-	// Present and handle a login button
+    // Display and handle a login button
     IAMService.doLogin();
   };
 
