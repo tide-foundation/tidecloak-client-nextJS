@@ -1,7 +1,7 @@
 // This is an example for an API endpoint that serves sensitive information for an authenticated user's session
 import { verifyTideCloakToken } from '/lib/tideJWT';
 
-// This endpoint is validating that only specific role will be authorised to access the data
+// This endpoint is validating that only a specific role will be authorised to access the data
 const AllowedRole = 'offline_access';
 
 export default async function handler(req, res) {
