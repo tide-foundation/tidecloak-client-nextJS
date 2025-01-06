@@ -8,7 +8,7 @@ export default function FailedPage() {
   }, []);
 
   const handleLogout = () => {
-	// Allow user to log out and start over
+    // Allow user to log out and start over
     IAMService.doLogout();
   };
 
