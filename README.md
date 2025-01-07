@@ -79,11 +79,16 @@ Within few seconds, you'll get your TideCloak host licenced and activated!
 Export your specific TideCloak settings and hardcode it in your project:
 1. Go to your [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) menu --> `myclient` client ID --> `Action` dropdown --> `Download adaptor configs` option (keep it as `keycloak-oidc-keycloak-json` format)
 2. Download or copy the details of that config and paste it in the project's root folder under `keycloak.json`. Yes, it's most likely identical to what's there already, but you need to know this if you're deploying a live instance!
-3. Copy your Tide's public key for this realm from [http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs](http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs) and paste it in `/keys.json`. This is the only key you can and should trust!
+3. Copy your Tide's public key for this realm from [http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs](http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs) and paste it in `keys.json`. This is the only key you can and should trust!
+   - Here's how:
+   - In the project root folder, delete the old file: `rm keys.json`
+   - Create and edit a new revision: `nano keys.json`
+   - Paste Tide's public key for this realm.
+   - Exit and save (`CTRL-X` / `CMD-x`)
 
 ## 5. Deploy this Next.JS project locally
 
-Install and stage all the NodeJS dependencies for this project (you only need to do this once):
+Install all the NodeJS dependencies for this project (you only need to do this once):
 
 ```bash
 npm install
@@ -95,7 +100,10 @@ Build and run your project for debugging:
 npm run dev
 ```
 
-Or stage the project for production:
+<details>
+<summary>Alternatively, you can set up the project for production.</summary>
+
+To build and stage the project, use this instead:
 ```bash
 npm run build
 ```
@@ -104,6 +112,7 @@ then run in production:
 ```bash
 npm start
 ```
+</details>
 
 ## 6. Play!
 
@@ -111,14 +120,73 @@ npm start
 2. Click on the `Login` button
 3. Click on `Create an account`
 4. Provide a new username, password, recovery email
+5. Once successfully signing in / signing up successfuly, you'll land in the "Protected Page" showing you your anonimized username and confirming you have been assigned a UMA role (that's just a random role assigned to everyone we chosed to display for this demo).
+6. You can now click on `Make API Call` button to invoke a backend request to retrieve protected information.
+7. Once pressed, you'll get the JSON content of the API response displayed.
+8. You can also press the `Logout` button to invoke a full Single-Sign-Out.
 
-It will now show you that you're "Signed in" and it will show you your anonymous Tide username for this app.
+# Capabilities
 
-![This flow](ax/AuthorisedAccess.drawio.svg?raw=true "Flow")
-![This flow](ax/AuthorisedAccess.drawio.svg)
+## Normal authorised access
 
-![Alt text](ax/AuthorisedAccess.drawio.svg)
-<img src="./ax/AuthorisedAccess.drawio.svg">
+Here's the process happening on a standard successful access request:
+
+![Authorised flow](ax/nextjs-authorisedaccess.drawio.svg "Authorised access flow")
+
+1. User opens the default homepage at http://localhost:3000 (served by `index.js`) and presses the `Login` button.
+2. The page initializes a TideCloak session and calls for a log-in process. The user's browser is then redirected to TideCloak.
+3. TideCloak redirects the user to Tide as an external IdP (Identity Social Provider).
+4. Tide presents the user with its secure-enclave to conclude a sign-up / sign-in process.
+5. The user performs a zero-knowledge registration and authentication with Tide.
+6. Once successfully creating / authenticating the user with hermetic anonymity, together with secure authorization information managed on TideCloak, Tide creates and signs the user tokens to be sent back.
+7. The `redirect.js` callback page, exchanges the user's authentication code with the user tokens and redirects the user to be validated by the backend.
+8. Once the `middleware.js` backend validates the tokens and the specific user's roles in the context of this session, it redirects the user to its final secure destination.
+9. The `pretected.js` renders only for the authenticated and authorised user. From this point onwards, the user's token will follow every page they go, where the middleware will recheck before rendering the protected content on the browser.
+
+## Automatic restarting an authorised access
+
+If the user still holds a valid access token, by a previous session or through a Single-Sign-On on a different, related client (web platform), the system will automatically recognize it and redirect the user to its destination, skipping the unnecessary sign-in process.
+
+![Authorised flow](ax/nextjs-authorisedautoaccess.drawio.svg "Automatic authorised access flow")
+
+1. User opens the default homepage at http://localhost:3000 (served by `index.js`).
+2. The page initializes a TideCloak session (in a hidden frame `silent-check-sso.html`) that performs a background check against TideCloak.
+3. If TideCloak reconizes that user to be already signed-in, it'll provide the necessary code required for authentication.
+4. Once confirmed as authneticated, the `index.js` page will automatically redirect the user to be routed as authenticated.
+5. The `redirect.js` page will initialize the access tokens in the session and redirect the user to the backend for validation.
+6. Once the `middleware.js` backend validates the tokens and the specific user's roles in the context of this session, it redirects the user to its final secure destination.
+7. The `pretected.js` renders only for the authenticated and authorised user. From this point onwards, the user's token will follow every page they go, where the middleware will recheck before rendering the protected content on the browser.
+
+## Unauthenticated access attempt
+
+When a user fails to sucessfuly authenticate, it will be redirected back to the original home page on `index.js`.
+
+![Unauthenticated flow](ax/nextjs-unauthenticatedattempt.drawio.svg "Unauthenticated access attempt flow")
+
+## Unauthorized access attempt
+
+A successfuly authenticated user that have been assigned roles / permissions / priviledged that are insufficient for the pages / section of the web site will be redirected to the `fail.js` page where they could `sign out`.
+
+![Unauthorized flow](ax/nextjs-unauthorisedattempt.drawio.svg "Unauthorized access attempt flow")
+
+## Authorized API access
+
+While on a protected page (e.g. `protected.js`) the frontend may initiate manual or automated API requests from the backend that require the specific user's credentials.
+
+![API flow](ax/nextjs-authorisedAPIaccess.drawio.svg "Authorized API access flow")
+
+## Single-Sign-Out
+
+During a normally authorized session, the user may opt to leave, but with explicit request to sign themselves out. This will trigger a system-wide sign-out process that will impact their sessions across other related-platforms as well.
+
+![SSOut flow](ax/nextjs-ssologout.drawio.svg "Single-Sign-Out flow")
+
+## Automated session refresh flow
+
+To guarantee the user remains connected and properly served while preventing a malicious actor from stealing that user's session, there's a background mechanism happening that continiously checks the session liveness and extends it.
+
+![Refresh flow](ax/nextjs-autotokenrefresh.drawio.svg "Automated refresh access flow")
+
 
 ## Project recap
 
