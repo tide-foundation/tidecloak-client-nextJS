@@ -1,0 +1,9 @@
+.vscode/*
+!.vscode/extensions.json
+node_modules
+package-lock.json
+.next
+keycloak.json
+keys.json
+*Zone.Identifier
+
