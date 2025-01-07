@@ -114,6 +114,12 @@ npm start
 
 It will now show you that you're "Signed in" and it will show you your anonymous Tide username for this app.
 
+![This flow](ax/AuthorisedAccess.drawio.svg?raw=true "Flow")
+![This flow](ax/AuthorisedAccess.drawio.svg)
+
+![Alt text](ax/AuthorisedAccess.drawio.svg)
+<img src="./ax/AuthorisedAccess.drawio.svg">
+
 ## Project recap
 
 Let's review what just happened and what you've just accomplished:
