@@ -179,7 +179,7 @@ There's two additional layers of protection you can configure through TideCloak:
 The Next.js project structure:
 
 ```
-MyProject/
+tidecloak-client-nextJS/
 │
 ├── public/
 │   └── silent-check-sso.html
