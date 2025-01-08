@@ -22,7 +22,7 @@ sudo docker run \
   tideorg/tidecloak-dev:latest
 npm install
 ```
-Activate license by [Request License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings)
+Activate license by [Manage License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings) then `Request License`
 ```bash
 curl -o ./keys.json "http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs"
 npm run dev
