@@ -4,7 +4,32 @@ So, you want to build the best digital platforms on the planet, without the burd
 
 This example repo demonstrates the minimal steps required to secure a web-based platform utilizing NextJS and TideCloak -  **all in under 10 minutes** .
 
-TideCloak gives you a plug and play tool that incorporates all the concepts and technology discussed [in this series](https://tide.org/blog/rethinking-cybersecurity-for-developers). It allows you to manage your web users' roles and permissions - It's an adaptation of Redhat's open-source KeyCloak, one of the most robust, powerful and feature-rich Identity and Access Management system. But best of all it's secured by Tide's Cybersecurity Fabric so no-one holds the keys to the kingdom.
+TideCloak gives you a plug and play tool that incorporates all the concepts and technology discussed [in this series](https://tide.org/blog/rethinking-cybersecurity-for-developers). It allows you to manage your web users' roles and permissions - It's an adaptation of Redhat's open-source [Keycloak](https://www.keycloak.org/), one of the most robust, powerful and feature-rich Identity and Access Management system. But best of all it's secured by Tide's Cybersecurity Fabric so no-one holds the keys to the kingdom.
+
+## TL;DR
+If you've done this before, or know well what you're doing, you can skip this guide and just follow the summarised steps:
+```bash
+git clone https://github.com/tide-foundation/tidecloak-client-nextJS.git
+cd tidecloak-client-nextJS
+sudo docker run \
+  -d \
+  -v .:/opt/keycloak/data/h2 \
+  -v ./test-realm.json:/opt/keycloak/data/import/test-realm.json \
+  --name tidecloak \
+  -p 8080:8080 \
+  -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+  -e KC_BOOTSTRAP_ADMIN_PASSWORD=password \
+  tideorg/tidecloak-dev:latest
+npm install
+```
+Activate license by [Request License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings)
+```bash
+curl -o ./keys.json "http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs"
+npm run dev
+```
+And [play](http://localhost:3000)!
+<br/><br/>
+Otherwise, follow this guide below:
 
 ## Prerequisites
 
@@ -18,10 +43,19 @@ For the purpose of this guide, we assume to run on a Debian linux host (either u
 
 ## 1. Deploy this Next.JS project locally
 
-Download and stage the Next.js project structure first. This can be done by **either**:
-1. Cloning this repository: `git clone https://github.com/tide-foundation/tidecloak-client-nextJS.git`
-2. Downloading and unzipping this repository from https://github.com/tide-foundation/tidecloak-client-nextJS/archive/refs/heads/main.zip
-3. Creating each file from scratch.
+Download and stage the Next.js project structure first. One way is by cloning this repository:
+```bash
+git clone https://github.com/tide-foundation/tidecloak-client-nextJS.git
+```
+
+<details>
+<summary>Although there are other ways too.</summary>
+
+This can also be done by either:
+1. Downloading and unzipping this repository from https://github.com/tide-foundation/tidecloak-client-nextJS/archive/refs/heads/main.zip
+2. Creating each file from scratch.
+
+</details>
 
 Set yourself at the root of the project directory. e.g.:
 ```bash
@@ -79,12 +113,7 @@ Within few seconds, you'll get your TideCloak host licenced and activated!
 Export your specific TideCloak settings and hardcode it in your project:
 1. Go to your [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) menu --> `myclient` client ID --> `Action` dropdown --> `Download adaptor configs` option (keep it as `keycloak-oidc-keycloak-json` format)
 2. Download or copy the details of that config and paste it in the project's root folder under `keycloak.json`. Yes, it's most likely identical to what's there already, but you need to know this if you're deploying a live instance!
-3. Copy your Tide's public key for this realm from [http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs](http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs) and paste it in `keys.json`. This is the only key you can and should trust!
-   - Here's how:
-   - In the project root folder, delete the old file: `rm keys.json`
-   - Create and edit a new revision: `nano keys.json`
-   - Paste Tide's public key for this realm.
-   - Exit and save (`CTRL-X` / `CMD-x`)
+3. Copy your Tide's public key for this realm from [http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs](http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs) and paste it in `keys.json`. This is the only key you can and should trust! Here's a quick way: `curl -o ./keys.json "http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs"` .
 
 ## 5. Deploy this Next.JS project locally
 
@@ -125,11 +154,58 @@ npm start
 7. Once pressed, you'll get the JSON content of the API response displayed.
 8. You can also press the `Logout` button to invoke a full Single-Sign-Out.
 
-# Capabilities
+## Project recap
+
+Let's review what just happened and what you've just accomplished:
+
+1. You have built and deployed, from the ground-up, a fully-functional Next.JS full-stack app - both front end and back end.
+2. Web users can now sign up and sign in to your app, being served customized content to authenticated and unauthenticated users and based on their predefined roles.
+3. Your web users' roles and permissions are managed locally on your very own self-hosted instance of TideCloak - one of the most robust, powerful and feature-rich Identity and Access Management system which you have downloaded, installed, configured and deployed locally.
+4. Your web users enjoy fully-secured Tide accounts, with their identity and access-credentials sitting outside of anyone's reach.
+5. Your TideCloak instance is secured by the global Tide Cybersecurity Fabric that you have activated and licensed.
+
+## What next?
+
+There's two additional layers of protection you can configure through TideCloak:
+
+1. **Identity Governance:** Establish workflow processes ensuring that no compromised administrator can cause damage.
+2. **User walletization:** Ability to lock user data with unique user keys secured by Tide's Cybersecurity Fabric - so ownership and privacy can be guaranteed.
+
+### **For early access to these features [Sign up for our Beta Program](https://tide.org/beta)**
+
+
+# How does it work?
+
+The Next.js project structure:
+
+```
+MyProject/
+│
+├── public/
+│   └── silent-check-sso.html
+│
+├── lib/
+│   ├── IAMService.js
+│   └── tideJWT.js
+│
+├── pages/
+│   ├── index.js
+│   ├── fail.js
+│   ├── protected.js
+│   ├── api/
+│   │   └── endpoint.js
+│   └── auth/
+│       └── redirect.js
+│
+├── middleware.js
+├── keycloak.json
+├── keys.json
+└── package.json
+```
 
 ## Normal authorised access
 
-Here's the process happening on a standard successful access request:
+Here's the process happening on a successful access request:
 
 ![Authorised flow](ax/nextjs-authorisedaccess.drawio.svg "Authorised access flow")
 
@@ -186,52 +262,3 @@ During a normally authorized session, the user may opt to leave, but with explic
 To guarantee the user remains connected and properly served while preventing a malicious actor from stealing that user's session, there's a background mechanism happening that continiously checks the session liveness and extends it.
 
 ![Refresh flow](ax/nextjs-autotokenrefresh.drawio.svg "Automated refresh access flow")
-
-
-## Project recap
-
-Let's review what just happened and what you've just accomplished:
-
-1. You have programmed, compiled, built and deployed, from the ground-up, a fully-functional Next.JS full-stack app with frontend and backend.
-2. Web users can now sign up and sign in to your app, being served customized content to authenticated and unauthenticated users and based on their predefined roles.
-3. Your web users' roles and permissions are managed locally on your very own self-hosted instance of TideCloak - one of the most robust, powerful and feature-rich Identity and Access Management system which you have downloaded, installed, configured and deployed locally.
-4. Your web users enjoy fully-secured Tide accounts, with their identity and access-credentials sitting outside of anyone's reach.
-5. Your TideCloak instance is secured by the global Tide Cybersecurity Fabric that you have activated and licensed.
-
-## What next?
-
-There's two additional layers of protection you can configure through TideCloak:
-
-1. **Identity Governance:** Establish workflow processes ensuring that no compromised administrator can cause damage.
-2. **User walletization:** Ability to lock user data with unique user keys secured by Tide's Cybersecurity Fabric - so ownership and privacy can be guaranteed.
-
-### **For early access to these features [Sign up for our Beta Program](https://tide.org/beta)**
-
-# Here's what in the project
-
-Let's create the following simple Next.js project structure:
-
-```
-MyProject/
-│
-├── public/
-│   └── silent-check-sso.html
-│
-├── lib/
-│   ├── IAMService.js
-│   └── tideJWT.js
-│
-├── pages/
-│   ├── index.js
-│   ├── fail.js
-│   ├── protected.js
-│   ├── api/
-│   │   └── endpoint.js
-│   └── auth/
-│       └── redirect.js
-│
-├── middleware.js
-├── keycloak.json
-├── keys.json
-└── package.json
-```
