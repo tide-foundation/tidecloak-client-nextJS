@@ -207,7 +207,7 @@ tidecloak-client-nextJS/
 
 Here's the process happening on a successful access request:
 
-![Authorised flow](ax/nextjs-authorisedaccess.drawio.svg "Authorised access flow")
+<img src="ax/nextjs-authorisedaccess.drawio.svg" alt="Authorized flow" title="Authorised access flow" width=100%>
 
 1. User opens the default homepage at http://localhost:3000 (served by `index.js`) and presses the `Login` button.
 2. The page initializes a TideCloak session and calls for a log-in process. The user's browser is then redirected to TideCloak.
@@ -223,7 +223,7 @@ Here's the process happening on a successful access request:
 
 If the user still holds a valid access token, by a previous session or through a Single-Sign-On on a different, related client (web platform), the system will automatically recognize it and redirect the user to its destination, skipping the unnecessary sign-in process.
 
-![Authorised flow](ax/nextjs-authorisedautoaccess.drawio.svg "Automatic authorised access flow")
+<img src="ax/nextjs-authorisedautoaccess.drawio.svg" alt="Authorised flow" title="Automatic authorised access flow" width=100%>
 
 1. User opens the default homepage at http://localhost:3000 (served by `index.js`).
 2. The page initializes a TideCloak session (in a hidden frame `silent-check-sso.html`) that performs a background check against TideCloak.
@@ -237,28 +237,28 @@ If the user still holds a valid access token, by a previous session or through a
 
 When a user fails to sucessfuly authenticate, it will be redirected back to the original home page on `index.js`.
 
-![Unauthenticated flow](ax/nextjs-unauthenticatedattempt.drawio.svg "Unauthenticated access attempt flow")
+<img src="ax/nextjs-unauthenticatedattempt.drawio.svg" alt="Unauthenticated flow" title="Unauthenticated access attempt flow" width=100%>
 
 ## Unauthorized access attempt
 
 A successfuly authenticated user that have been assigned roles / permissions / priviledged that are insufficient for the pages / section of the web site will be redirected to the `fail.js` page where they could `sign out`.
 
-![Unauthorized flow](ax/nextjs-unauthorisedattempt.drawio.svg "Unauthorized access attempt flow")
+<img src="ax/nextjs-unauthorisedattempt.drawio.svg" alt="Unauthorized flow" title="Unauthorized access attempt flow" width=100%>
 
 ## Authorized API access
 
 While on a protected page (e.g. `protected.js`) the frontend may initiate manual or automated API requests from the backend that require the specific user's credentials.
 
-![API flow](ax/nextjs-authorisedAPIaccess.drawio.svg "Authorized API access flow")
+<img src="ax/nextjs-authorisedAPIaccess.drawio.svg" alt="API flow" title="Authorized API access flow" width=100%>
 
 ## Single-Sign-Out
 
 During a normally authorized session, the user may opt to leave, but with explicit request to sign themselves out. This will trigger a system-wide sign-out process that will impact their sessions across other related-platforms as well.
 
-![SSOut flow](ax/nextjs-ssologout.drawio.svg "Single-Sign-Out flow")
+<img src="ax/nextjs-ssologout.drawio.svg" alt="SSOut flow" title="Single-Sign-Out flow" width=100%>
 
 ## Automated session refresh flow
 
 To guarantee the user remains connected and properly served while preventing a malicious actor from stealing that user's session, there's a background mechanism happening that continiously checks the session liveness and extends it.
 
-![Refresh flow](ax/nextjs-autotokenrefresh.drawio.svg "Automated refresh access flow")
+<img src="ax/nextjs-autotokenrefresh.drawio.svg" alt="Refresh flow" title="Automated refresh access flow" width=100%>
