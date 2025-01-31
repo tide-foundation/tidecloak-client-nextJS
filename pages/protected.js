@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState } from "react";
 import IAMService from "/lib/IAMService";
+import Link from "next/link";
 
 export default function ProtectedPage() {
   const [username, setUsername] = useState("unknown");
@@ -70,6 +71,9 @@ export default function ProtectedPage() {
       )}
 	  <p/>
 	  <button onClick={handleLogout}>Logout</button>
+    <li>
+      <Link href="/encrypt">Want to encrypt your date of birth?</Link>
+    </li>
     </div>
   );
 }

@@ -1,8 +1,18 @@
 {
-  "realm": "nextjs-test",
-  "auth-server-url": "http://localhost:8080/",
+  "realm": "myrealm",
+  "auth-server-url": "http://localhost:8080",
   "ssl-required": "external",
   "resource": "myclient",
   "public-client": true,
-  "confidential-port": 0
+  "confidential-port": 0,
+  "vendorId":  "3820962056275033757502457040641660900883948832551562203269565044879815748608",
+  "homeOrkUrl": "http://localhost:1001",
+  "jwk": {
+    "kid": "6yTaGPjnAGfJ33kN8DrPZkBmkWhGeLmqTH5GMAiGo78",
+    "kty": "OKP",
+    "alg": "EdDSA",
+    "use": "sig",
+    "crv": "Ed25519",
+    "x": "vK_OJ3k5XCodMIWb7IHX_cCw712-dwExclborm7Fla0"
+  }
 }

@@ -7,6 +7,7 @@ const routesRoles = [
   { URLStart: "/adminprotected", role: 'appAdmin' },
   { URLStart: "/alsoprotected", role: 'offline_access' },
   { URLStart: "/protected", role: 'offline_access' },
+  { URLStart: "/encrypt", role: '_tide_dob.selfencrypt'}
 ];
 
 export async function middleware(req) {
@@ -54,4 +55,5 @@ export async function middleware(req) {
 //Which routes the middleware should run on:
 export const config = {
   matcher: ["/protected/:path*"],
+  matcher: ["/encrypt/:path*"]
 };
