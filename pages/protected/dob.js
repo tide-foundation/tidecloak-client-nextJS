@@ -13,12 +13,13 @@ function toHexString(byteArray) {
     }).join('')
   }
 
-export default function EncryptPage() {
+export default function DobPage() {
   const [username, setUsername] = useState("unknown");
   const [hasEncrypted, setHasEncrypted] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
-  const [dob, setDob] = useState('01/01/1970');
+  const [dob, setDob] = useState('unavailable');
   const [loading, setLoading] = useState(false);
+  const [encryptedDataSet, setEncryptedDataSet] = useState(false);
 
   useEffect(() => {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
@@ -28,38 +29,38 @@ export default function EncryptPage() {
         setUsername(IAMService.getName() || "unknown-user");
       }
     });
+
+    // Fetch dob from DB if its there
+    fetchEncryptedDob();
   }, []);
 
   const handleLogout = () => {
     // Allow and handle user log out
     IAMService.doLogout();
   };
-
-  const fetchEndpoint = async () => {
-    // An example for securely fetching information from resource server
-    try {
-      const newToken = await IAMService.getToken();
-      console.debug('[fetchEndpoint] Token valid for ' + IAMService.getTokenExp() + ' seconds');
-      const response = await fetch('/api/endpoint', {
-        method: 'POST',
+  const fetchEncryptedDob = async () => {
+    setLoading(true);
+    const resp = await fetch('/api/retrieve', {
+        method: 'GET',
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${newToken}`, // Add the token to the Authorization header
-        },
+          Authorization: `Bearer ${await IAMService.getToken()}`, // Add the token to the Authorization header
+        }
       });
-
-      if (!response.ok) {
-        throw `API call failed: ${response.statusText}`;
-      }
-
-      const data = await response.json();
-      setApiResponse(data); // Set the response to state
-    } catch (error) {
-      console.error('Error during API call:', error);
-      setApiResponse({ error: error.message });
+    const dob = JSON.parse(await resp.text()).dob;
+    if(!dob) setDob("01/01/1970")
+    else{
+      // decrypt
+      const decryptedDob = await IAMService.doDecrypt([
+        {
+          "encrypted": dob,
+          "tags": ["dob"]
+        }
+      ]);
+      setDob(decryptedDob);
     }
-  };
-  
+    setLoading(false);
+  }
 
   const encrypt = async (e) => {
     setLoading(true);
@@ -76,10 +77,10 @@ export default function EncryptPage() {
           accept: 'application/json',
           Authorization: `Bearer ${await IAMService.getToken()}`, // Add the token to the Authorization header
         },
-        body: Buffer.from(encryptedDob[0]).toString('hex')
+        body: encryptedDob[0]
     });
-    await response;
-    console.log("Encryption successful");
+    const resp = await response.text();
+    console.log(resp);
     setLoading(false);
   }
 
@@ -88,13 +89,11 @@ export default function EncryptPage() {
       <h1>Encrypt Page</h1>
       <p>Enter your Date of Birth to securely encrypt it with Tide</p>
       <p>
-        <strong>Username:</strong> {username}
       </p>{loading ? <>
         <p>Please wait. Loading...</p>
         </> : 
         <>
-        {!hasEncrypted ? <>
-            <label>
+        <label>
             Your date of birth:
             <input
                 value={dob} // ...force the input's value to match the state variable...
@@ -102,12 +101,6 @@ export default function EncryptPage() {
             />
             </label>
             <button onClick={encrypt}>Encrypt</button>
-            </> : 
-            // fetch encrypted dob from server
-
-            <>
-
-        </>}
       </>}
       
       <p/>

@@ -15,7 +15,7 @@ export default function ProtectedPage() {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
     IAMService.initIAM(() => {
       if (IAMService.isLoggedIn()) {
-	// An example on collecting user information to peform client side operations (i.e. display)
+	      // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
         setHasUMARole(IAMService.hasOneRole( 'uma_authorization' ));
       }
@@ -72,7 +72,7 @@ export default function ProtectedPage() {
 	  <p/>
 	  <button onClick={handleLogout}>Logout</button>
     <li>
-      <Link href="/encrypt">Want to encrypt your date of birth?</Link>
+      <Link href="/protected/dob">Want to encrypt your date of birth?</Link>
     </li>
     </div>
   );

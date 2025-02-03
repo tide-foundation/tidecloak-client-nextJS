@@ -1,5 +1,5 @@
 // This is an example for an API endpoint that serves sensitive information for an authenticated user's session
-import { AddDOB } from '../../lib/db';
+import { AddDOB, GetDOB } from '../../lib/db';
 import { verifyTideCloakToken } from '/lib/tideJWT';
 
 // This endpoint is validating that only a specific role will be authorised to access the data
@@ -21,8 +21,14 @@ export default async function handler(req, res) {
     if (!user) {
       return res.status(403).json({ error: 'Forbidden: Invalid token or role' });
     }
-    await AddDOB(user.vuid, req.body);
-    return res.status(200).json({ok:200})
+
+    try{
+      const dob = await GetDOB(user.vuid, req.body);
+      res.status(200).json({dob: dob});
+    }catch{
+      res.status(200).json({dob:null})
+    }
+
   } catch (error) {
     console.error('Token verification failed:', error);
     res.status(500).json({ error: 'Internal Server Error' });
