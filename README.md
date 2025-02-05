@@ -22,9 +22,10 @@ sudo docker run \
   tideorg/tidecloak-dev:latest
 npm install
 ```
-Activate license by [Manage License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings) then `Request License`
+Activate license by [Manage License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings) then `Request License`.
+<br/>
+Get settings by [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) --> _myclient_ --> _Action_ --> `Download adapter config` and put it inside `tidecloak.json`.
 ```bash
-curl -o ./keys.json "http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs"
 npm run dev
 ```
 And [play](http://localhost:3000)!
@@ -112,8 +113,7 @@ Within few seconds, you'll get your TideCloak host licenced and activated!
 
 Export your specific TideCloak settings and hardcode it in your project:
 1. Go to your [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) menu --> `myclient` client ID --> `Action` dropdown --> `Download adaptor configs` option (keep it as `keycloak-oidc-keycloak-json` format)
-2. Download or copy the details of that config and paste it in the project's root folder under `keycloak.json`. Yes, it's most likely identical to what's there already, but you need to know this if you're deploying a live instance!
-3. Copy your Tide's public key for this realm from [http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs](http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs) and paste it in `keys.json`. This is the only key you can and should trust! Here's a quick way: `curl -o ./keys.json "http://localhost:8080/realms/nextjs-test/protocol/openid-connect/certs"` .
+2. Download or copy the details of that config and paste it in the project's root folder under `tidecloak.json`.
 
 ## 5. Deploy this Next.JS project locally
 
