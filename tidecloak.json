@@ -6,11 +6,15 @@
   "public-client": true,
   "confidential-port": 0,
   "jwk": {
-    "kid": "p4Eb1ZCr-8kV5ry_UcqC85Mdve4nhw67qhJ9kBoEQmk",
-    "kty": "OKP",
-    "alg": "EdDSA",
-    "use": "sig",
-    "crv": "Ed25519",
-    "x": "9JG7Y-kBbsmrHgwgi1vX0Q6ggzqwic7StV7BDFogVZo"
+    "keys": [
+      {
+        "kid": "p4Eb1ZCr-8kV5ry_UcqC85Mdve4nhw67qhJ9kBoEQmk",
+        "kty": "OKP",
+        "alg": "EdDSA",
+        "use": "sig",
+        "crv": "Ed25519",
+        "x": "9JG7Y-kBbsmrHgwgi1vX0Q6ggzqwic7StV7BDFogVZo"
+      }
+    ]
   }
 }
