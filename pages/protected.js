@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState } from "react";
 import IAMService from "/lib/IAMService";
+import Link from "next/link";
 
 export default function ProtectedPage() {
   const [username, setUsername] = useState("unknown");
@@ -14,7 +15,7 @@ export default function ProtectedPage() {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
     IAMService.initIAM(() => {
       if (IAMService.isLoggedIn()) {
-	// An example on collecting user information to peform client side operations (i.e. display)
+	      // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
         setHasUMARole(IAMService.hasOneRole( 'uma_authorization' ));
       }
@@ -70,6 +71,9 @@ export default function ProtectedPage() {
       )}
 	  <p/>
 	  <button onClick={handleLogout}>Logout</button>
+    <li>
+      <Link href="/protected/dob">Want to encrypt your date of birth?</Link>
+    </li>
     </div>
   );
 }
