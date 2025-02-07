@@ -1,12 +1,12 @@
 {
-  "realm": "myrealm",
-  "auth-server-url": "http://localhost:8080",
+  "realm": "encryption",
+  "auth-server-url": "https://staging.dauth.me",
   "ssl-required": "external",
   "resource": "myclient",
   "public-client": true,
   "confidential-port": 0,
-  "vendorId":  "3820962056275033757502457040641660900883948832551562203269565044879815748608",
-  "homeOrkUrl": "http://localhost:1001",
+  "vendorId":  "2581372473059612118248760811199351572979313210943150822829198576365897129162",
+  "homeOrkUrl": "https://sork1.tideprotocol.com",
   "jwk": {
     "kid": "6yTaGPjnAGfJ33kN8DrPZkBmkWhGeLmqTH5GMAiGo78",
     "kty": "OKP",

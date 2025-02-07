@@ -1,1 +1,8 @@
-{"keys":[{"kid":"6yTaGPjnAGfJ33kN8DrPZkBmkWhGeLmqTH5GMAiGo78","kty":"OKP","alg":"EdDSA","use":"sig","crv":"Ed25519","x":"vK_OJ3k5XCodMIWb7IHX_cCw712-dwExclborm7Fla0"}]}
+{"keys":[{
+    "kid": "0gUekatalUVVXW0sn-WihXh9jHTQEjhLmftqsFXVjNA",
+    "kty": "OKP",
+    "alg": "EdDSA",
+    "use": "sig",
+    "crv": "Ed25519",
+    "x": "dVPCdXvJOV7m-r8yQJzvbT8yjAWGfTCUODgeGZhXBcU"
+  }]}
