@@ -1,103 +1,161 @@
-# Setting up Tide-secure-IGA
+# Setting up TideCloak Quorum
 
-## Overview 
+## Introducing TideCloak Quorum-Enforced Authorization
 
-What guarantees that a rogue system administrator, or malicious TideCloak developer won't grant themselves god-like access to everything? What can assure no one can make effective changes to the IAM? Until today, NOTHING can guarantee that.
-TideCloak is the first and only Identity and Access Management system capable of allowing only permitted administrators to make effective changes to user's access with a cryptographic guarantee.
+What if an attacker forges an access token by compromising your IAM’s root keys? What if that attacker is actually one of your own IAM administrators? What if they grant themselves full, unrestricted privileges to your system? What if the attacker is the developer of the IAM itself?
 
-## Here's how it works
-User's access rights are granted via the eventual grant of an access token, assigning access privileges (roles/attributes/permissions) on a specific subsystem (client), to a specific successfully-authenticated user, for a specific amount of time. That access token is called a JSON Web Token (JWT), and it is cryptographically signed with the system's (IAM) highest authority key. The designated subsystem should honour the token's access request, if everything checks out.
-Unlike all other IAM's, on a IGA-enabled TideCloak realm:
-- Subsystems only honour tokens signed by one specific Vendor Verifiable Key (VVK).
-- That VVK isn't stored or accessed in the IAM or anywhere in the system. The VVK is never held by anyone ever. Tide is handling that key in an ineffable manner (complete zero-knowledge, blind, cryptographically secure manner). Therefore, Tide is the only thing signing every user's JWT token when needed.
-- Before signing, Tide verifies the content of the JWT and make sure all conditions are met according to the set specifications: that the user has authenticated successfully, the destination subsystem, the session duration, the privileges - all conform to what was originally defined by the administrators.
-- Those definitions, that act like a set of rules, are also signed by the administrators with their individual keys.
-- Enforcing these definition requires the signatures of a quorum of administrators to guarantee that even if one of few administrators go rogue, the others will prevent malicious behaviour. The quorum is set as a minimum of ~70% of the entire group of administrators, allowing for 30% redundancy: 2 out of 3, 3 out of 5, 7 out of 10, 14 out of 20, etc.
-- Until a minimal threshold of the quorum approved a change, it remains in a draft mode. Only when a quorum achieved, the change becomes effective.
-- The individual keys used by the administrators to approve each change aren't help anywhere either. Tide is managing those personal (and private) keys in the same ineffable manner.
-- Any attempt to compromise, change or bypass TideCloak, the administrators' keys, the VVK, the quorum or this mechanism, will cause the eventual JWT signature to fail mathematically. Each step of this process is transparent and entirely verifiable by all participants, making it very easy to pick up on malicious behaviour.
-No one, not any one of the administrators, the developers of TideCloak, anyone in Tide - can compromise this mechanism.
+These scenarios are all too possible with today's Identity or Access Management (IAM) solutions. A single bad actor—internal or external—can override or exploit your system and there's nothing you could do about it. You also wouldn't know about it until it's way too late.
 
-## The process
+**TideCloak Quorum** changes this reality. It is the **first and only IAM** platform that ensures no single individual can create, modify, or forge access privileges. 
 
-1. Any administrator may draft a change to a user privilege. On a IGA-enabled TideCloak realm, that draft isn't automatically enforced.
-2. Any administrator in the quorum may see the pending drafts, review, and either approve or reject the draft.
-3. Individual approval of a draft requires the administrator to sign in to their Tide account and use their personal key to sign that approval.
-4. Depending which majority is reached first, approvers or rejectors, the draft is either accepted or denied.
-5. Once accepted, the approved change is then committed and become effective in the system.
+By blending a cryptographically protected authorization mechanism with an uncircumventable governance model, TideCloak Quorum solves the greatest security threat plaguing organizations: ensuring that **no single point of failure** or malicious insider can undermine your security.
 
-## Creation of the administration quorum
 
-To set up TideCloak with a quorum of administrators that have exclusive, definite, and absolute authority over the VVK (not as individuals, but as a group), these steps need to be followed:
-Prerequisites: A VVK must be generated for the specific TideCloak's realm. Each realm can only have 1 VVK. This is achieved by creating a Tide Identity Provider and activating its license.
-1. Switch IGA on
-2. Create the administrators user accounts
-3. Invite the administrators to associate their existing/new Tide accounts
-4. Assign Tide realm admin rights to the first administrator
-5. Approve and commit that first administrator's change. Once that has been committed, the master administrator can no longer approve changes.
-6. Having the Tide administrator sign in
-7. Assign the rest of the administrators the Tide realm admin rights
-8. Each administrator must review, approve and commit those drafts 
+## How it works
 
-## Step-by-step instructions
+Access rights are enforced according to a cryptographically signed JWTs (JSON Web Tokens). Before your subsystem (client) grants access privileges:
 
-It is assumed the realm has been created (realm name: `nextjs-test`).
+1. **Tokens Signed by an Ineffable Tide Key:**  
+   Each token is signed by the realm's Vendor Verifiable Key (VVK), on the Tide Cybersecurity Fabric where it can never be lost, misused or abused.
+3. **Automated Policy Enforcements:**  
+   Before signing, Tide's Fabric automatically verifies all the requested privileges and session details against cryptographically signed administrator-approved rules.
+4. **Quorum Approval of Rules:**  
+   Any change to these rules requires cryptographic approval from a majority of admins—protecting against rogue actors. No single malicious actor can subvert the quorum’s controls.
+5. **Protected Admin Keys:**  
+   Each admin’s personal key is also safeguarded by Tide's Fabric with same zero-knowledge approach.
 
-In this guide, we'll assume that the TideCloak master admin kicks this process off and starts by enabling IGA:
+Any attempt to tamper with these tokens or bypass the multi-admin policies simply fails mathematically, and the fraud is exposed instantly. 
 
-1. Access `Realm settings` menu --> `General` [tab](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/general) --> `Identity Governance and Administration`: _On_
+## The Quorum Governance Process
 
-The master admin then proceeds to invite Alice, the first Tide realm admin, to associate her account:
+1. **Draft a Change:** Any administrator drafts a modification to an access privileges or system configuration.  
+2. **Review:** Quorum administrators inspect this draft and either approve or reject it.
+3. **Cryptographic Endorsement:** Each approving admin signs in using their personal Tide-protected key to cryptographically confirm change.
+4. **Commit:** If approvals meet the required ~70% quorum threshold (e.g., 2 out of 3, 3 out of 5), the changes are committed and become immediately effective.
 
-2. `Users` menu --> `Add user` [button](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user) --> `Username`: _Alice_, `Email`: _alice@email.here_ --> `Create` button
-3. `Users` [menu](http://localhost:8080/admin/master/console/#/nextjs-test/users) --> `Alice` user --> `Credentials` tab --> `Credential Reset` link --> `Reset action`: _Link Tide Account_ --> `Copy Link` button
-4. The **Master admin* manually DM Alice the link over any desired established communications channel. It is also possible to let TideCloak send that link directly via email by [setting up the email server](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/email) first under `Realm settings` menu --> `email` tab.
+No attacker, admin, or even a compromised developer—no matter how privileged—can circumvent this process. Not even us at Tide.
 
-Alice receives the invitation link and use it on her own browser:
+## Forming the Admin Quorum
 
-5. She opens the link
-6. Clicks the _Click here to proceed_ link
-7. Signs in / Signs up for a Tide account
+1. **Enable Quorum in TideCloak:** Switch on this multi-admin governance mode within your chosen realm.  
+2. **Invite Admins:** Securely send invitation links for each admin to associate their Tide account with the realm.
+3. **Assign Initial Quorum Admin:** Grant the first admin the quorum role, establishing the quorum and relinquishing local authority.
+4. **Quorum Formation:** Newly authorized admins can add more administrators. Each assignment requires majority approval before it’s final.  
+5. **Ongoing Governance:** From that point forward, every critical realm change—adding new privileges, clients, or roles—requires approval from majority of the quorum.
 
-Once Alice completed associating her Tide account per invitation, the TideCloak's **Master admin** then continues to grant Alice her Tide realm admin privileges:
+## Step-by-Step Example
 
-8. `Users` [menu](http://localhost:8080/admin/master/console/#/nextjs-test/users) --> `Alice` user --> `Role mapping` tab --> `Assign role` button --> Tick `tide-realm-admin` role --> `Assign` button
-9. `Change Requests` menu --> `Users` [tab](http://localhost:8080/admin/master/console/#/nextjs-test/change-requests/users) --> Tick `Granting Role to User (tide-realm-admin)` draft --> `Review Draft` button (--> status should turn to APPROVED)
-10. `Change Requests` menu --> `Users` tab --> Tick `Granting Role to User (tide-realm-admin)` draft --> `Commit Draft` button (--> draft should disappear)
+Below is a concrete example of enabling Quorum in a realm named `nextjs-test`, with a licensed `Tide` IdP, and a client named `myclient`.
 
-Alice has now been appointed first effective Tide Admin of the `nextjs-test` realm and can access it on http://localhost:8080/admin/nextjs-test/console/ and use her secure Tide account to log in and continue the set up:
+### 1. Enable Quorum-enabled Governance
 
-11. `Users` menu --> `Add user` [button](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user) --> `Username`: _Bob_, `Email`: _bob@email.here_ --> `Create` button
-12. `Users` [menu](http://localhost:8080/admin/master/console/#/nextjs-test/users) --> `Bob` user --> `Credentials` tab --> `Credential Reset` link --> `Reset action`: _Link Tide Account_ --> `Copy Link` button
-13. Alice manually DM Bob the link over any desired established communications channel.
-14. `Users` menu --> `Add user` [button](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user) --> `Username`: _Carol_, `Email`: _carol@email.here_ --> `Create` button
-15. `Users` [menu](http://localhost:8080/admin/master/console/#/nextjs-test/users) --> `Carol` user --> `Credentials` tab --> `Credential Reset` link --> `Reset action`: _Link Tide Account_ --> `Copy Link` button
-16. Alice manually DM Carol the link over any desired established communications channel.
+As a realm's admin, follow these steps:
 
-Bob and Carol, each at their leisure, proceed and use the invite link to associate their existing/new Tide account. When either or both complete this, Alice proceeds to grow the quorum:
+a. Switch on IGA
+   - Navigate to **Realm Settings → [General](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/general)**
+   - Set **Identity Governance and Administration** to **On**.
 
-17. `Users` menu --> `Bob` user --> `Role mapping` tab --> `Assign role` button --> Tick `tide-realm-admin` role --> `Assign` button
-18. `Change Requests` menu --> `Users` tab --> Tick `Granting Role to User (tide-realm-admin)` draft --> `Review Draft` button 
-19. Alice sign in the approval enclave using her Tide account --> `Approve changeset request` button
-20. `Change Requests` menu --> `Users` tab --> Tick `Granting Role to User (tide-realm-admin)` draft --> `Commit Draft` button
-21. `Users` menu --> `Carol` user --> `Role mapping` tab --> `Assign role` button --> Tick `tide-realm-admin` role --> `Assign` button
-22. `Change Requests` menu --> `Users` tab --> Tick `Granting Role to User (tide-realm-admin)` draft --> `Review Draft` button 
-23. Alice sign in the approval enclave using her Tide account --> `Approve changeset request` button
+### 2. Add the First Admin
 
-Now that Bob is part of the quorum, Alice may want to wait for Bob to review and approve Carol's addition to the quorum:
+a. **Create User “Alice”**  
+   - Go to **Users → [Add User](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user)**
+     - Set **Username:** `Alice`  
+     - Set **Email:** `alice@email.here`
+	 - Click `Create`
 
-24. Bob goes to his `Change Requests` menu --> `Users` tab --> Tick `Granting Role to User (tide-realm-admin)` draft --> `Review Draft` button 
-25. Bob sign in his approval enclave using his Tide account --> `Approve changeset request` button
+b. **Associate Her Tide Account**
+   - In Alice’s profile, under **Credentials**, click **Credential Reset**
+     - In **Reset action** field, add **Link Tide Account**
+     - Click `Copy Link`
+   - Paste the link in a direct message to Alice (or email automatically if you've set up TideCloak’s [email setup](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/email))
 
-Now the quorum includes Alice, Bob and Carol where either 2 of the 3 is sufficient to approve any change set before it can be committed in TideCloak securely.
-To enforce the newly created `myclient` in the `nextjs-test` realm, either two of the 3 admins may review and approve the draft:
+Alice opens the link and authenticates with Tide, finalizing her TideCloak association.
+Once she's done, the realm's admin continues:
 
-26. `Change Requests` menu --> `Clients` [tab](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/change-requests/clients) --> Tick `New Client Created (myclient)` draft --> `Review Draft` button
-27. Sign in the approval enclave using their Tide account --> `Approve changeset request` button
+### 3. Assign Alice as a Quorum Admin
 
-Once two admins approve the draft, anyone can proceed and enforce it: 
+a. **Grant Role**  
+   - Go to **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users) → Alice → Role Mapping → Assign Role**
+   - Tick **tide-realm-admin**
+   - Click `Assign`
 
-28. `Change Requests` menu --> `Clients` [tab](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/change-requests/clients) --> Tick `New Client Created (myclient)` draft --> `Commit Draft` button 
+b. **Approve**
+Commit**
+   - Navigate to **Change Requests → [Users](http://localhost:8080/admin/master/console/#/nextjs-test/change-requests/users)**  
+   - Tick the draft: **Granting Role to User** (tide-realm-admin)
+   - Click `Review Draft` (Its status will turn APPROVED)
 
-Now, the `myclient` client application has been committed and can be used at: http://localhost:3000/
+c. **Commit**
+   - Tick that same draft
+   - Click `Commit Draft` (The draft will disappear)
 
+Alice now has administrative rights in the `nextjs-test` realm and can sign in at  
+[http://localhost:8080/admin/nextjs-test/console/](http://localhost:8080/admin/nextjs-test/console/) using her Tide account. Alice will take this from here and follow these steps:
+
+### 4. Invite Other Admins
+
+a. **Create Bob & Carol**  
+   - Navigate to **Users → [Add User](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user)** for each
+   - Provide usernames (**Bob** and **Carol**) & emails (**bob@email.here**, **carol@email.here**)
+   - Click `Create`
+
+b. **Invite to Link Tide Accounts**  
+   - **Users → Bob → Credentials → Reset action: _Link Tide Account_ → Copy Link**
+   - Paste the link in a direct message to Bob 
+   - **Users → Carol → Credentials → Reset action: _Link Tide Account_ → Copy Link**
+   - Paste the link in a direct message to Carol 
+   - Send each link securely to Bob and Carol.
+
+c. **Associate Accounts**  
+   - Bob and Carol finalize their Tide associations individually.
+
+Once Bob and Carol associated their Tide account, Alice proceeds:
+
+### 5. Form the Quorum
+
+a. **Suggest Adding Bob to the Quorum**  
+   - Navigate to **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users) → Bob → Role Mapping → Assign Role → _tide-realm-admin_ → Assign**
+
+b. **Endorse Bob's addition**
+   - Navigate to **Change Requests → [Users](http://localhost:8080/admin/master/console/#/nextjs-test/change-requests/users)** → _Granting Role to User (tide-realm-admin)_ → Review Draft
+   - Sign in her Tide account
+   - Click `Approve changeset request`
+
+c. **Activate Bob's Quorum membership**  
+   - Tick **Change Requests → [Users](http://localhost:8080/admin/master/console/#/nextjs-test/change-requests/users)** → _Granting Role to User (tide-realm-admin)_ → Commit Draft
+
+d. **Add Carol to the Quorum**  
+   - Repeat same step **a.** above for Carol
+   - Both existing admins (e.g., Alice and Bob) review and approve (follow step **b.**)
+   - Commit (step **c.**) once quorum approval is met.
+
+Now you have a quorum of three admins (Alice, Bob, Carol). Any action that requires approval must pass at least 2 of 3 votes.
+
+### 6. Approve remaining Realm Changes
+
+At minimum, you'll need the quorum to approve the creation of the new client `myclient`:
+
+a. **Approve the New Client _myclient_**
+   - Navigate to **Change Requests → [Clients](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/change-requests/clients)**  
+   - Select **New Client Created (myclient)** draft and click `Review Draft`
+
+b. **Finalize Quorum Approval**
+   - Once two admins approve, anyone can `Commit` that change.
+
+The new client is now fully active, and in the `nextjs-test` example, is available at http://localhost:3000/
+
+
+---
+
+## Conclusion
+
+**TideCloak’s Quorum-Enforced Authorization**: Where every access is *provably* transparent, tamperproof and secure.
+
+This mechanism uniquely delivers a **game-changing** approach to IAM:
+
+- **Impenetrable Access Tokens:** No one can forge or tamper with a user’s cryptographically signed JWT, even if the IAM is compromised.  
+- **Un-bypassable Multi-Admin Governance:** Every authorization change requires a quorum of admins, whose private keys are protected in a zero-knowledge manner.
+
+By eliminating single points of failure and preventing any single entity from overriding your security, TideCloak Quorum ensures that **no attacker, insider, or rogue developer** can compromise your most critical resources.
+
+---  
