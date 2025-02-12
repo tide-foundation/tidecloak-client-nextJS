@@ -1,8 +1,0 @@
-{"keys":[{
-    "kid": "0gUekatalUVVXW0sn-WihXh9jHTQEjhLmftqsFXVjNA",
-    "kty": "OKP",
-    "alg": "EdDSA",
-    "use": "sig",
-    "crv": "Ed25519",
-    "x": "dVPCdXvJOV7m-r8yQJzvbT8yjAWGfTCUODgeGZhXBcU"
-  }]}
