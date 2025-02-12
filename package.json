@@ -4,13 +4,13 @@
   "private": false,
   "dependencies": {
     "jose": "^5.9.6",
-    "keycloak-js": "25.0.6",
     "next": "^15.1.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "buffer": "6.0.3",
     "sqlite3": "5.1.7",
-    "sqlite": "5.1.1"
+    "sqlite": "5.1.1",
+    "heimdall-plus": "0.6.23"
   },
   "scripts": {
     "dev": "next dev",
