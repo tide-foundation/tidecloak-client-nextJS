@@ -10,10 +10,13 @@ export default function ProtectedPage() {
   const [username, setUsername] = useState("unknown");
   const [hasUMARole, setHasUMARole] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
+    setLoading(true);
     IAMService.initIAM(() => {
+      setLoading(false);
       if (IAMService.isLoggedIn()) {
 	      // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
@@ -55,25 +58,31 @@ export default function ProtectedPage() {
   return (
     <div>
       <h1>Protected Page</h1>
-      <p>If you're seeing this, your access priviledges were successfully verified!</p>
-      <p>
-        <strong>Username:</strong> {username}
-      </p>
-      <p>
-        <strong>Has UMA Role:</strong> {hasUMARole ? "Yes" : "No"}
-      </p>
-      <button onClick={fetchEndpoint}>Make API Call</button>
-      {apiResponse && (
-        <div>
-          <h3>API Response:</h3>
-          <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
-        </div>
-      )}
-	  <p/>
+      {!loading ? <>
+        <p>If you're seeing this, your access priviledges were successfully verified!</p>
+          <p>
+            <strong>Username:</strong> {username}
+          </p>
+          <p>
+            <strong>Has UMA Role:</strong> {hasUMARole ? "Yes" : "No"}
+          </p>
+          <button onClick={fetchEndpoint}>Make API Call</button>
+          {apiResponse && (
+            <div>
+              <h3>API Response:</h3>
+              <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
+            </div>
+          )}
+          <li>
+            <Link href="/protected/dob">Want to encrypt your date of birth?</Link>
+          </li>
+        <p/>
+      </>
+      :
+      <>
+        <p>Loading...</p>
+      </>}
 	  <button onClick={handleLogout}>Logout</button>
-    <li>
-      <Link href="/protected/dob">Want to encrypt your date of birth?</Link>
-    </li>
     </div>
   );
 }
