@@ -4,7 +4,7 @@ import { verifyTideCloakToken } from '/lib/tideJWT';
 
 // This endpoint is validating that only a specific role will be authorised to access the data
 const AllowedRole = '_tide_dob.selfencrypt';
-
+ 
 export default async function handler(req, res) {
 
   const authHeader = req.headers.authorization;
