@@ -2,11 +2,39 @@
   "realm": "nextjs-test",
   "enabled": true,
   "sslRequired": "external",
-  "registrationAllowed": true,
+  "registrationAllowed": false,
+  "duplicateEmailsAllowed": true,
   "roles": {
+    "realm": [
+      {
+        "name": "_tide_dob.selfencrypt",
+        "description": "Tide E2EE self-encrypt DoB data"
+      },
+      {
+        "name": "_tide_dob.selfdecrypt",
+        "description": "Tide E2EE self-decrypt DoB data"
+      },
+      {
+        "name": "default-roles-nextjs-test",
+        "description": "${role_default-roles}",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "_tide_dob.selfencrypt",
+            "_tide_dob.selfdecrypt"
+          ]
+        }
+      }
+    ],
     "client": {
       "myclient": []
     }
+  },
+  "defaultRole": {
+    "name": "default-roles-nextjs-test",
+    "description": "${role_default-roles}",
+    "composite": true,
+    "clientRole": false
   },
   "clients": [
     {
@@ -41,6 +69,16 @@
           }
         },
         {
+          "name": "Tide IGA Role Mapper",
+          "protocol": "openid-connect",
+          "protocolMapper": "tide-roles-mapper",
+          "consentRequired": false,
+          "config": {
+            "lightweight.claim": "true",
+            "access.token.claim": "true"
+          }
+        },
+        {
           "name": "Tide vuid",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-attribute-mapper",
@@ -65,11 +103,11 @@
       "providerId": "tide",
       "enabled": true,
       "config": {
+        "changeSetEndpoint": "http://localhost:8080",
         "LogoURL": "http://localhost:8080/realms/nextjs-test/tide-idp-resources/images/LOGO",
         "syncMode": "LEGACY",
         "ImageURL": "http://localhost:8080/realms/nextjs-test/tide-idp-resources/images/BACKGROUND_IMAGE",
         "loginFormType": "cmkOnly",
-		"changeSetEndpoint": "http://localhost:8080/admin/master/console/#/nextjs-test/change-requests",
         "homeORKurl": "https://ork1.tideprotocol.com",
         "clientSecret": "****"
       }
@@ -128,5 +166,5 @@
       "enabled": true
     }
   ],
-  "keycloakVersion": "26.1.0"
+  "keycloakVersion": "26.1.1"
 }
