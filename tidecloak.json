@@ -1,20 +1,22 @@
 {
-  "realm": "nextjs-test",
-  "auth-server-url": "https://login.dauth.me",
-  "ssl-required": "external",
-  "resource": "myclient",
-  "public-client": true,
-  "confidential-port": 0,
-  "jwk": {
-    "keys": [
-      {
-        "kid": "p4Eb1ZCr-8kV5ry_UcqC85Mdve4nhw67qhJ9kBoEQmk",
-        "kty": "OKP",
-        "alg": "EdDSA",
-        "use": "sig",
-        "crv": "Ed25519",
-        "x": "9JG7Y-kBbsmrHgwgi1vX0Q6ggzqwic7StV7BDFogVZo"
-      }
-    ]
+    "realm": "myrealm",
+    "auth-server-url": "http://localhost:8080",
+    "ssl-required": "external",
+    "resource": "myclient",
+    "public-client": true,
+    "confidential-port": 0,
+    "homeOrkUrl": "http://localhost:1001",
+    "vendorId": "1087644432465321974419856939770857300905213381530528280190773991397083403710",
+    "jwk": {
+      "keys": [
+        {
+          "kid": "UdbXWpHnSKPmFxhmMPR13LL2VoEv37caIvTbJcHmZOM",
+            "kty": "OKP",
+            "alg": "EdDSA",
+            "use": "sig",
+            "crv": "Ed25519",
+            "x": "t2tWMhg0VhbZommibz23s7RQArGCfhF7f3ZGbS1lWSc"
+        }
+      ]
+    }
   }
-}
