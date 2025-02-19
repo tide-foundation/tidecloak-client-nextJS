@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState } from "react";
 import IAMService from "/lib/IAMService";
+import Link from "next/link";
 
 export default function ProtectedPage() {
   const [username, setUsername] = useState("unknown");
