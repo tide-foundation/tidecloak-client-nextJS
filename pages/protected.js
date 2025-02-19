@@ -10,7 +10,7 @@ export default function ProtectedPage() {
   const [hasUMARole, setHasUMARole] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-
+ 
   useEffect(() => {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
     setLoading(true);
