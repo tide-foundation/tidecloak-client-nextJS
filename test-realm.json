@@ -21,7 +21,7 @@
       ],
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
-	  "publicClient": true,
+          "publicClient": true,
       "fullScopeAllowed": true,
       "protocolMappers": [
         {
@@ -41,16 +41,6 @@
           }
         },
         {
-          "name": "Tide IGA Role Mapper",
-          "protocol": "openid-connect",
-          "protocolMapper": "tide-roles-mapper",
-          "consentRequired": false,
-          "config": {
-            "lightweight.claim": "true",
-            "access.token.claim": "true"
-          }
-        },
-        {
           "name": "Tide vuid",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-attribute-mapper",
@@ -65,20 +55,6 @@
             "claim.name": "vuid",
             "jsonType.label": "String"
           }
-        },
-		{
-          "name": "myrealmroles",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usermodel-realm-role-mapper",
-          "config": {
-            "introspection.token.claim": "true",
-            "multivalued": "true",
-            "userinfo.token.claim": "true",
-            "id.token.claim": "true",
-            "lightweight.claim": "false",
-            "access.token.claim": "true",
-            "jsonType.label": "String"
-          }
         }
       ]
     }
@@ -89,12 +65,11 @@
       "providerId": "tide",
       "enabled": true,
       "config": {
-        "payerPublic": "200000eaba60a9a1e581298795298072fdd3bfb712623a8d99c3038a95cce4cf74750b",
         "LogoURL": "http://localhost:8080/realms/nextjs-test/tide-idp-resources/images/LOGO",
         "syncMode": "LEGACY",
         "ImageURL": "http://localhost:8080/realms/nextjs-test/tide-idp-resources/images/BACKGROUND_IMAGE",
         "loginFormType": "cmkOnly",
-        "obfGVVK": "d3344fcc4ce3db3665592c45c0b7215e3c9eca3457df7b0d74ccc1dc9f44efaa",
+		"changeSetEndpoint": "http://localhost:8080/admin/master/console/#/nextjs-test/change-requests",
         "homeORKurl": "https://ork1.tideprotocol.com",
         "clientSecret": "****"
       }
@@ -153,5 +128,5 @@
       "enabled": true
     }
   ],
-  "keycloakVersion": "26.0.6"
+  "keycloakVersion": "26.1.0"
 }
