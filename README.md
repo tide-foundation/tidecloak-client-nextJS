@@ -23,11 +23,12 @@ sudo docker run \
 npm install
 ```
 Activate license by [Manage License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings) then `Request License`.
-<br/>
+
 Get settings by [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) --> _myclient_ --> _Action_ --> `Download adapter config` and put it inside `tidecloak.json`.
 ```bash
 npm run dev
 ```
+[Enable IGA](https://github.com/tide-foundation/tidecloak-client-nextJS/blob/main/SetupIGA.md) <br/> 
 And [play](http://localhost:3000)!
 <br/><br/>
 Otherwise, follow this guide below:
@@ -87,13 +88,26 @@ This may take a couple of minutes, so be patient. When it's done, you'll be able
 
 This is how it was set up:
 1. Create a new Realm. E.g. `nextjs-test`
-2. Set up a Tide IdP: `Identity providers` menu --> `Tide` social provider --> `Settings` tab
-3. You can upload a custom background image and/or custom logo image for your users' Tide login page.
-4. Allow unfeted user registration (good for development, bad for production): `Realm settings` menu --> `Login` tab --> `User registration` set to `On`
-5. Remove the user detail collection: `Realm settings` menu --> `User profile` tab --> Delete `lastName`, Delete `firstName`, `email` --> `Required field` set to `Off` --> `Save`
-6. Enable Tide IdP in authentication flow: `Authentication` menu --> `Flows` tab --> `browser` flow --> `Settings` of `Identity Provider Redirector` --> `Alias` set to "tide", `Default identity Provider` set to "tide" --> `Save`
-7. Create client: `Clients` menu --> `Clients list` tab --> `Create client` button --> `Client ID` set to "myclient", `Next` --> `Authentication flow` tick only `Standard flow`, `Next` --> `Valid redirect URIs` set to "http://localhost:3000/silent-check-sso.html" and "http://localhost:3000/auth/redirect", `Web origins` set to "http://localhost:3000" (NO '/' AT THE END!), `Next`
-8. Add roles to JWT: `Clients` menu --> `myclient` client ID --> `Client scopes` tab --> `myclient-dedicated` scope --> `Scope` tab --> `Full scope allowed` set to `On`
+2. Set up a Tide IdP:
+   - `Identity providers` menu → `Tide` social provider → `Settings` tab
+4. You can upload a custom background image and/or custom logo image for your users' Tide login page.
+5. Verify user registration (good practice for production environments) is off:
+   - `Realm settings` menu → `Login` tab → `User registration` set to `Off`
+8. Remove the user detail collection:
+   - `Realm settings` menu → `User profile` tab → Delete `lastName`, Delete `firstName`, `email` → `Required field` set to `Off` → `Save`
+9. Enable Tide IdP in authentication flow:
+   - `Authentication` menu → `Flows` tab → `browser` flow → `Settings` of `Identity Provider Redirector` → `Alias` set to "tide", `Default identity Provider` set to "tide" → `Save`
+10. Activate Tide linking:
+   - `Authentication` menu → `Required actions` tab → `Link Tide Account` enable to `On`
+12. Create client:
+    - `Clients` menu → `Clients list` tab → `Create client` button → `Client ID` set to "myclient", `Next` → `Authentication flow` tick only `Standard flow`, `Next` → `Valid redirect URIs` set to "http://localhost:3000/silent-check-sso.html" and "http://localhost:3000/auth/redirect", `Web origins` set to "http://localhost:3000" (NO '/' AT THE END!), `Next`
+13. Add roles to JWT:
+    - `Clients` menu → `myclient` client ID → `Client scopes` tab → `myclient-dedicated` scope → `Scope` tab → `Full scope allowed` set to `On`
+14. Create self-encryption roles:
+    - `Realm Roles` menu → `Create role` button → set `Role name` to "_tide_dob.selfdecrypt" → `Save`
+    - `Realm Roles` menu → `Create role` button → set `Role name` to "_tide_dob.selfencrypt" → `Save`
+15. Add new roles to default roles:
+    - `Realm settings` menu → `User registration` tab → `Assign role` button → `Filter by realm roles` dropdown → tick both new roles → `Assign`
 
 </details>
 
