@@ -24,7 +24,7 @@ npm install
 ```
 Activate license by [Manage License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings) then `Request License`.
 
-Get settings by [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) --> _myclient_ --> _Action_ --> `Download adapter config` and put it inside `tidecloak.json`.
+Get settings by [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) → _myclient_ → _Action_ → `Download adapter config` and put it inside `tidecloak.json`.
 ```bash
 npm run dev
 ```
@@ -100,7 +100,7 @@ This is how it was set up:
 10. Activate Tide linking:
    - `Authentication` menu → `Required actions` tab → `Link Tide Account` enable to `On`
 12. Create client:
-    - `Clients` menu → `Clients list` tab → `Create client` button → `Client ID` set to "myclient", `Next` → `Authentication flow` tick only `Standard flow`, `Next` → `Valid redirect URIs` set to "http://localhost:3000/silent-check-sso.html" and "http://localhost:3000/auth/redirect", `Web origins` set to "http://localhost:3000" (NO '/' AT THE END!), `Next`
+    - `Clients` menu → `Clients list` tab → `Create client` button → `Client ID` set to "myclient", `Next` → `Authentication flow` tick only `Standard flow`, `Next` → `Valid redirect URIs` set to _`http://localhost:3000/silent-check-sso.html`_ and _`http://localhost:3000/auth/redirect`_, `Web origins` set to _`http://localhost:3000`_ (NO '/' AT THE END!), `Next`
 13. Add roles to JWT:
     - `Clients` menu → `myclient` client ID → `Client scopes` tab → `myclient-dedicated` scope → `Scope` tab → `Full scope allowed` set to `On`
 14. Create self-encryption roles:
@@ -115,8 +115,8 @@ This is how it was set up:
 
 To hook your TideCloak host into Tide's Cybersecurity Fabric, you'll need to activate your license. Tide offers free developer license for up to 100 users. To do that, you'll need to:
 
-* Access your TideCloak administration console at [http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings)
-* Log in using your admin credentials (Username: admin, Password: password, if you haven't changed it) (You should be automatically navigated to: `nextjs-test` realm --> `Identity Providers` menu --> `tide` IdP --> `Settings` tab)
+* Navigate to your TideCloak administration console at the [Tide IdP Settings page](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings)
+* Log in using your admin credentials (Username: `admin`, Password: `password`, if you haven't changed it) (You should be automatically navigated to: `nextjs-test` realm → `Identity Providers` menu → `tide` IdP → `Settings` tab)
 * Click on the `Manage License` button next to `License`
 * Click on the blue `Request License` button
 * Go through the checkout process by providing a contact email
@@ -126,7 +126,7 @@ Within few seconds, you'll get your TideCloak host licenced and activated!
 ## 4. Extract your settings
 
 Export your specific TideCloak settings and hardcode it in your project:
-1. Go to your [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) menu --> `myclient` client ID --> `Action` dropdown --> `Download adaptor configs` option (keep it as `keycloak-oidc-keycloak-json` format)
+1. Go to your [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) menu → `myclient` client ID → `Action` dropdown → `Download adaptor configs` option (keep it as `keycloak-oidc-keycloak-json` format)
 2. Download or copy the details of that config and paste it in the project's root folder under `tidecloak.json`.
 
 ## 5. Deploy this Next.JS project locally
