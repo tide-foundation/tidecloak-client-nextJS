@@ -19,7 +19,7 @@ export default function DobPage() {
   const [apiResponse, setApiResponse] = useState(null);
   const [dob, setDob] = useState('unavailable');
   const [loading, setLoading] = useState(false);
-  const [encryptedDataSet, setEncryptedDataSet] = useState(false);
+  const [encryptedDoB, setEncryptedDoB] = useState('unavailable');
 
   useEffect(() => {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
@@ -40,16 +40,18 @@ export default function DobPage() {
   };
   const fetchEncryptedDob = async () => {
     setLoading(true);
+    const newToken = await IAMService.getToken();
     const resp = await fetch('/api/retrieve', {
         method: 'GET',
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${await IAMService.getToken()}`, // Add the token to the Authorization header
+          Authorization: `Bearer ${newToken}`, // Add the token to the Authorization header
         }
       });
     const dob = JSON.parse(await resp.text()).dob;
     if(!dob) setDob("01/01/1970")
     else{
+      setEncryptedDoB(dob);
       // decrypt
       const decryptedDob = await IAMService.doDecrypt([
         {
@@ -93,6 +95,7 @@ export default function DobPage() {
         <p>Please wait. Loading...</p>
         </> : 
         <>
+        
         <label>
             Your date of birth:
             <input
@@ -101,13 +104,14 @@ export default function DobPage() {
             />
             </label>
             <button onClick={encrypt}>Encrypt</button>
+			<p><strong>Encrypted DoB:</strong></p><textarea readOnly={true} value={encryptedDoB} rows="1" cols="25" />
       </>}
       
       <p/>
-      <button onClick={handleLogout}>Logout</button>
-      <li>
       <Link href="/protected">Go back to protected home page</Link>
-    </li>
+      <p>
+      <button onClick={handleLogout}>Logout</button>
+    </p>
     </div>
   );
 }

@@ -73,9 +73,7 @@ export default function ProtectedPage() {
               <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
             </div>
           )}
-          <li>
-            <Link href="/protected/dob">Want to encrypt your date of birth?</Link>
-          </li>
+          <p><Link href="/protected/dob">Personal data</Link></p>
         <p/>
       </>
       :
