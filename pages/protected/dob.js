@@ -7,11 +7,11 @@ import IAMService from "/lib/IAMService";
 import Link from "next/link";
 import { Buffer } from "buffer";
  
-function toHexString(byteArray) {
-    return Array.from(byteArray, function(byte) {
-      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
-    }).join('')
-  }
+//function toHexString(byteArray) {
+//    return Array.from(byteArray, function(byte) {
+//      return ('0' + (byte & 0xFF).toString(16)).slice(-2);
+//    }).join('')
+//  }
 
 export default function DobPage() {
   const [username, setUsername] = useState("unknown");
@@ -19,7 +19,7 @@ export default function DobPage() {
   const [apiResponse, setApiResponse] = useState(null);
   const [dob, setDob] = useState('unavailable');
   const [loading, setLoading] = useState(false);
-  const [encryptedDoB, setEncryptedDoB] = useState('unavailable');
+  const [encDoBField, setEncDoBField] = useState('unavailable');
 
   useEffect(() => {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
@@ -51,7 +51,7 @@ export default function DobPage() {
     const dob = JSON.parse(await resp.text()).dob;
     if(!dob) setDob("01/01/1970")
     else{
-      setEncryptedDoB(dob);
+      setEncDoBField(dob);
       // decrypt
       const decryptedDob = await IAMService.doDecrypt([
         {
@@ -82,7 +82,7 @@ export default function DobPage() {
         body: encryptedDob[0]
     });
     const resp = await response.text();
-    console.log(resp);
+    setEncDoBField(encryptedDob);
     setLoading(false);
   }
 
@@ -104,7 +104,7 @@ export default function DobPage() {
             />
             </label>
             <button onClick={encrypt}>Encrypt</button>
-			<p><strong>Encrypted DoB:</strong></p><textarea readOnly={true} value={encryptedDoB} rows="1" cols="25" />
+			<p><strong>Encrypted DoB:</strong></p><textarea readOnly={true} value={encDoBField} rows="1" cols="25" />
       </>}
       
       <p/>
