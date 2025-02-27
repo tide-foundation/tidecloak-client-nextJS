@@ -10,7 +10,7 @@
     "buffer": "6.0.3",
     "sqlite3": "5.1.7",
     "sqlite": "5.1.1",
-    "heimdall-plus": "0.6.38"
+    "tidecloak-js": "0.6.45"
   },
   "scripts": {
     "dev": "next dev",
