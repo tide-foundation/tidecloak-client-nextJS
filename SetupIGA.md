@@ -55,6 +55,9 @@ a. Switch on IGA
    - Navigate to **Realm Settings → [General](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/general)**
    - Set **Identity Governance and Administration** to **On**.
 
+> [!IMPORTANT]
+> Once you've switched IGA on, and before you've added the first admin to your realm's quorum, your realm is now in a **Zero-Quorum** state. While in this state, the VVK is governed exclusively by the temporary VRK that's on TideCloak. This means that while the IGA is still operational, changes are not being reviewd and authorized by Tide-enabled admins - which means, it's a less secure state that can be compromised if the VRK is compromised (i.e. TideCloak hacked). This state will operate for up to 5 full days to allow you to set up of a quorum of Tide-enabled Admins of at least 1 admin. After 5 days, the VRK authority will expire and you may lose all access to the VVK permenantly. Be sure to quickly move to the next step to set up a quorum as soon as possible.
+
 ### 2. Add the First Admin
 
 a. **Create User “Alice”**  
@@ -67,7 +70,7 @@ b. **Associate Her Tide Account**
    - In Alice’s profile, under **Credentials**, click **Credential Reset**
      - In **Reset action** field, add **Link Tide Account**
      - Click `Copy Link`
-   - Paste the link in a direct message to Alice (or email automatically if you've set up TideCloak’s [email setup](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/email))
+   - Paste the link in a direct message to Alice (or email automatically if you've set up TideCloak’s [email settings](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/email))
 
 Alice opens the link and authenticates with Tide, finalizing her TideCloak association.
 Once she's done, the realm's admin continues:
@@ -79,11 +82,10 @@ a. **Grant Role**
    - Tick **tide-realm-admin**
    - Click `Assign`
 
-b. **Approve**
-Commit**
+b. **Approve Commit**
    - Navigate to **Change Requests → [Users](http://localhost:8080/admin/master/console/#/nextjs-test/change-requests/users)**  
    - Tick the draft: **Granting Role to User** (tide-realm-admin)
-   - Click `Review Draft` (Its status will turn APPROVED)
+   - Click `Review Draft` (Its status will turn `APPROVED`)
 
 c. **Commit**
    - Tick that same draft
