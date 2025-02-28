@@ -43,7 +43,7 @@ Before starting, make sure you have:
 * Optional: Git installed
 * Internet connectivity
 
-For the purpose of this guide, we assume to run on a Debian linux host (either under Windows WSL or not).
+For the purpose of this guide, we assume Debian Linux command syntax (either under Windows WSL or not).
 
 ## 1. Deploy this Next.JS project locally
 
@@ -127,7 +127,7 @@ Within few seconds, you'll get your TideCloak host licenced and activated!
 
 ## 4. Set up Quorum-enabled Authorization
 
-To secure your realm against the highest cyber-threath, compromised-insider, set up provable Identity Governance and Administration on your realm (**IGA** for short). This step will achieve two important goals: protecting the realm's authority key with Ineffable Cryptography (where no one will ever hold), and restrict changes to only ones approved by a quorum of Tide-protected admins. For a complete step-by-step guide on setting it up securely, read more [here](https://github.com/tide-foundation/tidecloak-client-nextJS/blob/main/SetupIGA.md).
+To secure your realm against the highest cyber-threat, compromised-insider, set up provable Identity Governance and Administration on your realm (**IGA** for short). This step will achieve two important goals: protecting the realm's authority key with Ineffable Cryptography (where no one will ever hold), and restrict changes to only ones approved by a quorum of Tide-protected admins. For a complete step-by-step guide on setting it up securely, read [here](https://github.com/tide-foundation/tidecloak-client-nextJS/blob/main/SetupIGA.md).
 
 For a quick-guide, follow these steps:
 
@@ -195,7 +195,7 @@ npm start
 1. Go to [http://localhost:3000](http://localhost:3000/) You should see a welcome message to your app.
 2. Click on the `Login` button
 3. Use _Bob_'s Tide account to log in
-4. Once successfully signed in successfuly, you'll land in the "Protected Page" showing you your anonimized username and confirming you have been assigned a UMA role (that's just a random role assigned to everyone we chosed to display for this demo).
+4. Once successfully signed in successfully, you'll land in the "Protected Page" showing you your anonymized username and confirming you have been assigned a UMA role (that's just a random role assigned to everyone we chose for this demo).
 5. You can now click on `Make API Call` button to invoke a backend request to retrieve protected information.
 6. Once pressed, you'll get the JSON content of the API response displayed.
 7. You can also access the protected personal data page by clicking on its link. Here, you can experiment with Tide's End-to-End Encryption (E2EE) to lock and unlock the Date-of-birth (DoB) field, that no one can access except _Bob_.
@@ -206,13 +206,13 @@ npm start
 Let's review what just happened and what you've just accomplished:
 
 1. You have built and deployed, from the ground-up, a fully-functional Next.JS full-stack app - both front end and back end.
-2. Web users, like _Bob_, can be invited by admins, like _Alice_, to use it securely with their Tide account. Your web users enjoy fully-secured Tide accounts, with their identity and access-credentials sitting outside of anyone's reach.
+2. Web users, like _Bob_, can be invited by admins, like _Alice_, to use it securely with their Tide account. Your web users enjoy provably-secure Tide accounts, with their identity and access-credentials sitting outside of anyone's reach.
 3. Your web users can sign in to your app, be served customized content to authenticated and unauthenticated users and based on their predefined roles.
 4. Your web users' roles and permissions are managed locally on your very own self-hosted instance of TideCloak - one of the most robust, powerful and feature-rich Identity and Access Management system which you have downloaded, installed, configured and deployed locally.
 5. Your TideCloak realm ("_nextjs-test_") is secured by the global Tide Cybersecurity Fabric that you have activated and licensed.
 6. Your realm's authority key, the VVK, is secured, out of anyone's reach, by Tide Cybersecurity Fabric, such that even if your administrators, your TideCloak's instance, its source code or even our staff at Tide get compromised, still no one can ever get a hold of it.
 7. Changes to the realm's users access rights (e.g. roles, settings, clients) can be drafted by any of the realm's Tide-secured admins, but only go into affect after the rightful quorum of admins reviewed, agreed and committed it. No one can manipulate or bypass that process.
-8. Your web users sensitive date-of-birth field is hermatically secure at rest and in transit, by a key that is literally out of anyone's reach (Including administrators. Including us), and is unlocked only to the authorized users (themselves) at the edge device, on their browser.
+8. Your web users sensitive date-of-birth field is hermetically secure at rest and in transit, by a key that is literally out of anyone's reach (Including administrators. Including us), and is unlocked only to the authorized users (themselves) at the edge device, on their browser.
 
 ### **For our supported access to these capabilities, [sign up to our free Beta Program](https://tide.org/beta)**
 
@@ -269,21 +269,21 @@ If the user still holds a valid access token, by a previous session or through a
 
 1. User opens the default homepage at http://localhost:3000 (served by `index.js`).
 2. The page initializes a TideCloak session (in a hidden frame `silent-check-sso.html`) that performs a background check against TideCloak.
-3. If TideCloak reconizes that user to be already signed-in, it'll provide the necessary code required for authentication.
-4. Once confirmed as authneticated, the `index.js` page will automatically redirect the user to be routed as authenticated.
+3. If TideCloak recognizes that user to be already signed-in, it'll provide the necessary code required for authentication.
+4. Once confirmed as authenticated, the `index.js` page will automatically redirect the user to be routed as authenticated.
 5. The `redirect.js` page will initialize the access tokens in the session and redirect the user to the backend for validation.
 6. Once the `middleware.js` backend validates the tokens and the specific user's roles in the context of this session, it redirects the user to its final secure destination.
 7. The `pretected.js` renders only for the authenticated and authorised user. From this point onwards, the user's token will follow every page they go, where the middleware will recheck before rendering the protected content on the browser.
 
 ## Unauthenticated access attempt
 
-When a user fails to sucessfuly authenticate, it will be redirected back to the original home page on `index.js`.
+When a user fails to successfully authenticate, it will be redirected back to the original home page on `index.js`.
 
 <img src="ax/nextjs-unauthenticatedattempt.drawio.svg" alt="Unauthenticated flow" title="Unauthenticated access attempt flow" width=100%>
 
 ## Unauthorized access attempt
 
-A successfuly authenticated user that have been assigned roles / permissions / priviledged that are insufficient for the pages / section of the web site will be redirected to the `fail.js` page where they could `sign out`.
+A successfully authenticated user that have been assigned roles / permissions / privileges that are insufficient for the pages / section of the web site will be redirected to the `fail.js` page where they could `sign out`.
 
 <img src="ax/nextjs-unauthorisedattempt.drawio.svg" alt="Unauthorized flow" title="Unauthorized access attempt flow" width=100%>
 
