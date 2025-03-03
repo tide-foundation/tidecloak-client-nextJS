@@ -304,3 +304,28 @@ During a normally authorized session, the user may opt to leave, but with explic
 To guarantee the user remains connected and properly served while preventing a malicious actor from stealing that user's session, there's a background mechanism happening that continiously checks the session liveness and extends it.
 
 <img src="ax/nextjs-autotokenrefresh.drawio.svg" alt="Refresh flow" title="Automated refresh access flow" width=100%>
+
+## Authorized decryption flow
+
+Although it's not mandatory, it is assumed that end-to-end-encryption (E2EE) flows are served from a protected page. This code example, that is showcasing a standard scenario to decrypt a sensitive user Date-of-Birth field in a form, protects access to the form as described above on how to protect `protected.js` page: navigating with a valid JWT as a bearer token and validating the JWT in back-end's `middleware.js` script. Without these, the page wouldn't even load. The E2EE flow only starts from that point:
+
+1. User requests to load the dob.js form.
+2. The `dob.js` form is loaded and the date-of-birth field is being requested from the `retrieve.js` endpoint at the backend. That request bears the user's access token.
+3. The backend validates the user's JWT to assure the user has the correct `_tide_dob.selfdecrypt` role associated. If so, a request to the database is made to retrieve that field in it's encrypted form. IMPORTANT TO NOTE: neither the database nor the backend script have the key to decrypt that field!
+4. The field is being sent to the frontend, still in its encrypted form.
+5. The frontend sends that encrypted field to the user-interface.
+6. The script on the user-agent (browser) performs a request to the swarm in Tide Security Fabric that is responsible for that authority key, using a similar (but not identical) access token.
+7. Each Tide node in that authority key's swarm performs a validation of the access token, making sure that Tide-authenticated user-session holds a cryptographically-assured access roles for this particular field - and if so, performs a multi-party decryption on that field. The garbled replies from all the swarm's nodes are being interpolated on the user's browser to finalize the decryption process, and present the date-of-birth clear-text field for the user.
+
+<img src="ax/nextjs-e2ee-authdecrypt.drawio.svg" alt="Decryption flow" title="Authorized decryption flow" width=100%>
+
+## Authorized encryption flow
+
+1. Once a user made a change in the Tide-defined sensitive field, the date-of-birth, the user-agent browser communicates with the authority's keys swarm.
+2. Each of the swarm nodes performs validation of the user and the field and to finalize the authenticated-encryption of that field before sending it back.
+3. Once encrypted, the form is posted to the backend, as a standard HTTP POST request, with the date-of-birth field encrypted.
+4. The form details are being sent to the backend, where it all being validated.
+5. Once validated, the backend stores the field in the database in its encrypted form - with no key stored in the system.
+
+<img src="ax/nextjs-e2ee-authencrypt.drawio.svg" alt="Encryption flow" title="Authorized encryption flow" width=100%>
+
