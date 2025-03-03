@@ -89,26 +89,26 @@ This may take a couple of minutes, so be patient. When it's done, you'll be able
 <summary>Your realms has been automatically imported and set up.</summary>
 
 This is how it was set up:
-1. Create a new Realm. E.g. `nextjs-test`
+1. Create a new Realm `nextjs-test`.
 2. Set up a Tide IdP:
    - `Identity providers` menu → `Tide` social provider → `Settings` tab
-4. You can upload a custom background image and/or custom logo image for your users' Tide login page.
-5. Verify user registration (good practice for production environments) is off:
+3. You can upload a custom background image and/or custom logo image for your users' Tide login page.
+4. Verify user registration (good practice for production environments) is off:
    - `Realm settings` menu → `Login` tab → `User registration` set to `Off`
-8. Remove the user detail collection:
+5. Remove the user detail collection:
    - `Realm settings` menu → `User profile` tab → Delete `lastName`, Delete `firstName`, `email` → `Required field` set to `Off` → `Save`
-9. Enable Tide IdP in authentication flow:
+6. Enable Tide IdP in authentication flow:
    - `Authentication` menu → `Flows` tab → `browser` flow → `Settings` of `Identity Provider Redirector` → `Alias` set to "tide", `Default identity Provider` set to "tide" → `Save`
-10. Activate Tide linking:
+7. Activate Tide linking:
    - `Authentication` menu → `Required actions` tab → `Link Tide Account` enable to `On`
-12. Create client:
+8. Create client:
     - `Clients` menu → `Clients list` tab → `Create client` button → `Client ID` set to "myclient", `Next` → `Authentication flow` tick only `Standard flow`, `Next` → `Valid redirect URIs` set to _`http://localhost:3000/silent-check-sso.html`_ and _`http://localhost:3000/auth/redirect`_, `Web origins` set to _`http://localhost:3000`_ (NO '/' AT THE END!), `Next`
-13. Add roles to JWT:
+9. Add roles to JWT:
     - `Clients` menu → `myclient` client ID → `Client scopes` tab → `myclient-dedicated` scope → `Scope` tab → `Full scope allowed` set to `On`
-14. Create self-encryption roles:
+10. Create self-encryption roles:
     - `Realm Roles` menu → `Create role` button → set `Role name` to "_tide_dob.selfdecrypt" → `Save`
     - `Realm Roles` menu → `Create role` button → set `Role name` to "_tide_dob.selfencrypt" → `Save`
-15. Add new roles to default roles:
+11. Add new roles to default roles:
     - `Realm settings` menu → `User registration` tab → `Assign role` button → `Filter by realm roles` dropdown → tick both new roles → `Assign`
 
 </details>
