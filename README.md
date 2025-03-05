@@ -45,28 +45,28 @@ Before starting, make sure you have:
 
 For the purpose of this guide, we assume Debian Linux command syntax (either under Windows WSL or not).
 
-## 1. Deploy this Next.JS project locally
+## A. Deploy this Next.JS project locally
 
-Download and stage the Next.js project structure first. One way is by cloning this repository:
-```bash
-git clone https://github.com/tide-foundation/tidecloak-client-nextJS.git
-```
+1. Download and stage the Next.js project structure first. One way is by cloning this repository:
+   ```bash
+   git clone https://github.com/tide-foundation/tidecloak-client-nextJS.git
+   ```
 
 <details>
 <summary>Although there are other ways too.</summary>
 
 This can also be done by either:
-1. Downloading and unzipping this repository from https://github.com/tide-foundation/tidecloak-client-nextJS/archive/refs/heads/main.zip
-2. Creating each file from scratch.
+* Downloading and unzipping this repository from https://github.com/tide-foundation/tidecloak-client-nextJS/archive/refs/heads/main.zip
+* Creating each file from scratch.
 
 </details>
 
-Set yourself at the root of the project directory. e.g.:
-```bash
-cd tidecloak-client-nextJS
-```
+2. Set yourself at the root of the project directory. e.g.:
+   ```bash
+   cd tidecloak-client-nextJS
+   ```
 
-## 2. Getting TideCloak up and running
+## B. Getting TideCloak up and running
 
 TideCloak can be deployed locally, you can host it, or you can have a fully managed instance on [SkyCloak](http://skycloak.io). In this guide, we'll show you how to deploy a dev-mode docker instance locally.
 Start a TideCloak-Dev docker container that already includes all the basic configuration and settings to get you going. To get it, open your Docker/WSL/Linux terminal and run the following command from the root folder of this project (where test-realm.json is):
@@ -113,84 +113,84 @@ This is how it was set up:
 
 </details>
 
-## 3. Activate your TideCloak license
+## C. Activate your TideCloak license
 
 To hook your TideCloak host into Tide's Cybersecurity Fabric, you'll need to activate your license. Tide offers free developer license for up to 100 users. To do that, you'll need to:
 
-* Navigate to your TideCloak administration console at the [Tide IdP Settings page](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings)
-* Log in using your admin credentials (Username: `admin`, Password: `password`, if you haven't changed it) (You should be automatically navigated to: `nextjs-test` realm → `Identity Providers` menu → `tide` IdP → `Settings` tab)
-* Click on the `Manage License` button next to `License`
-* Click on the blue `Request License` button
-* Go through the checkout process by providing a contact email
+1. Navigate to your TideCloak administration console at the [Tide IdP Settings page](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings)
+2. Log in using your admin credentials (Username: `admin`, Password: `password`, if you haven't changed it) (You should be automatically navigated to: `nextjs-test` realm → `Identity Providers` menu → `tide` IdP → `Settings` tab)
+3. Click on the `Manage License` button next to `License`
+4. Click on the blue `Request License` button
+5. Go through the checkout process by providing a contact email
 
 Within few seconds, you'll get your TideCloak host licenced and activated!
 
-## 4. Set up Quorum-enabled Authorization
+## D. Set up Quorum-enabled Authorization
 
 To secure your realm against the highest cyber-threat, compromised-insider, set up provable Identity Governance and Administration on your realm (**IGA** for short). This step will achieve two important goals: protecting the realm's authority key with Ineffable Cryptography (where no one will ever hold), and restrict changes to only ones approved by a quorum of Tide-protected admins. For a complete step-by-step guide on setting it up securely, read [here](https://github.com/tide-foundation/tidecloak-client-nextJS/blob/main/SetupIGA.md).
 
 For a quick-guide, follow these steps:
 
-* **Realm settings** menu → [General](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/general) → **Identity Governance and Administration** : *On*
-* **Users** menu → [Add User](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user) → **Username**: _alice_ , **Email**: _alice@email.here_ → `Create`
-* **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users)** menu → **alice** user → **Credentials** tab → `Credential Reset` link → **Reset action** : _Link Tide Account_ → `Copy Link` button
-* Paste the link in a new (or private) browser and follow the instructions on screen to associate an existing or a new Tide account to Alice's account. Once associated, close that browser when done.
-* Return to the realm administration: **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users)** menu → **alice** user → **Role Mapping** tab → **Assign Role** → _tide-realm-admin_ : `Assign`
-* **Change Requests** menu → **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/change-requests/users)** tab → tick **Granting Role to User (tide-realm-admin)** → `Review Draft`
-* Tick same role again → `Commit Draft`
+1. **Realm settings** menu → [General](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/general) → **Identity Governance and Administration** : *On*
+2. **Users** menu → [Add User](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user) → **Username**: _alice_ , **Email**: _alice@email.here_ → `Create`
+3. **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users)** menu → **alice** user → **Credentials** tab → `Credential Reset` link → **Reset action** : _Link Tide Account_ → `Copy Link` button
+4. Paste the link in a new (or private) browser and follow the instructions on screen to associate an existing or a new Tide account to Alice's account. Once associated, close that browser when done.
+5. Return to the realm administration: **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users)** menu → **alice** user → **Role Mapping** tab → **Assign Role** → _tide-realm-admin_ : `Assign`
+6. **Change Requests** menu → **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/change-requests/users)** tab → tick **Granting Role to User (tide-realm-admin)** → `Review Draft`
+7. Tick same role again → `Commit Draft`
 
-## 5. Quorum-Authorize the _nextjs-test_ realm
+## E. Quorum-Authorize the _nextjs-test_ realm
 
 From this point on, the original TideCloak admin has no longer authority in the **nextjs-test**, and from now on, all administration and provisioning in that realm should be done exclusively as Alice, through the realm direct administration console.
 
-* Open another new (or private) browser [here](http://localhost:8080/admin/nextjs-test/console/) and use Alice's Tide account to log in.
-* **Change Requests** menu → **[Clients](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/change-requests/clients)** tab → tick **New Client Created (myclient)** → `Review Draft`
-* Tick same client again → `Commit Draft`
+1. Open another new (or private) browser [here](http://localhost:8080/admin/nextjs-test/console/) and use Alice's Tide account to log in.
+2. **Change Requests** menu → **[Clients](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/change-requests/clients)** tab → tick **New Client Created (myclient)** → `Review Draft`
+3. Tick same client again → `Commit Draft`
 
-## 6. Extract your settings
+## F. Extract your settings
 
 Export your specific TideCloak settings and hardcode it in your project:
 
 1. Go to your [Clients](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/clients) menu → `myclient` client ID → `Action` dropdown → `Download adaptor configs` option (keep it as `keycloak-oidc-keycloak-json` format)
 2. Download or copy the details of that config and paste it in the project's root folder under `tidecloak.json`.
 
-## 7. Create a demo user
+## G. Create a demo user
 
 For this example project's purpose, you'll need at least one "standard" user that is allowed in. As the newly appointed realm admin, Alice, set up Bob as a "standard" user:
 
-* **Users** menu → [Add User](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/users/add-user) → **Username**: _bob_ , **Email**: _bob@email.here_ → `Create`
-* **[Users](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/users)** menu → **bob** user → **Credentials** tab → `Credential Reset` link → **Reset action** : _Link Tide Account_ → `Copy Link` button
-* Paste the link in a new (or private) browser and follow the instructions on screen to associate an existing or a new Tide account to Bob's account. Do not associate Alice's Tide account for Bob! Once associated, close that browser when done.
+1. **Users** menu → [Add User](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/users/add-user) → **Username**: _bob_ , **Email**: _bob@email.here_ → `Create`
+2. **[Users](http://localhost:8080/admin/nextjs-test/console/#/nextjs-test/users)** menu → **bob** user → **Credentials** tab → `Credential Reset` link → **Reset action** : _Link Tide Account_ → `Copy Link` button
+3. Paste the link in a new (or private) browser and follow the instructions on screen to associate an existing or a new Tide account to Bob's account. Do not associate Alice's Tide account for Bob! Once associated, close that browser when done.
 
-## 8. Deploy this Next.JS project locally
+## H. Deploy this Next.JS project locally
 
-Install all the NodeJS dependencies for this project (you only need to do this once):
+1. Install all the NodeJS dependencies for this project (you only need to do this once):
+   
+   ```bash
+   npm install
+   ```
 
-```bash
-npm install
-```
+2. Build and run your project for debugging:
 
-Build and run your project for debugging:
-
-```bash
-npm run dev
-```
+   ```bash
+   npm run dev
+   ```
 
 <details>
 <summary>Alternatively, you can set up the project for production.</summary>
 
-To build and stage the project, use this instead:
-```bash
-npm run build
-```
+1. To build and stage the project, use this instead:
+   ```bash
+   npm run build
+   ```
 
-then run in production:
-```bash
-npm start
-```
+2. Then run in production:
+   ```bash
+   npm start
+   ```
 </details>
 
-## 6. Play!
+## I. Play!
 
 1. Go to [http://localhost:3000](http://localhost:3000/) You should see a welcome message to your app.
 2. Click on the `Login` button
@@ -205,14 +205,14 @@ npm start
 
 Let's review what just happened and what you've just accomplished:
 
-1. You have built and deployed, from the ground-up, a fully-functional Next.JS full-stack app - both front end and back end.
-2. Web users, like _Bob_, can be invited by admins, like _Alice_, to use it securely with their Tide account. Your web users enjoy provably-secure Tide accounts, with their identity and access-credentials sitting outside of anyone's reach.
-3. Your web users can sign in to your app, be served customized content to authenticated and unauthenticated users and based on their predefined roles.
-4. Your web users' roles and permissions are managed locally on your very own self-hosted instance of TideCloak - one of the most robust, powerful and feature-rich Identity and Access Management system which you have downloaded, installed, configured and deployed locally.
-5. Your TideCloak realm ("_nextjs-test_") is secured by the global Tide Cybersecurity Fabric that you have activated and licensed.
-6. Your realm's authority key, the VVK, is secured, out of anyone's reach, by Tide Cybersecurity Fabric, such that even if your administrators, your TideCloak's instance, its source code or even our staff at Tide get compromised, still no one can ever get a hold of it.
-7. Changes to the realm's users access rights (e.g. roles, settings, clients) can be drafted by any of the realm's Tide-secured admins, but only go into affect after the rightful quorum of admins reviewed, agreed and committed it. No one can manipulate or bypass that process.
-8. Your web users sensitive date-of-birth field is hermetically secure at rest and in transit, by a key that is literally out of anyone's reach (Including administrators. Including us), and is unlocked only to the authorized users (themselves) at the edge device, on their browser.
+* You have built and deployed, from the ground-up, a fully-functional Next.JS full-stack app - both front end and back end.
+* Web users, like _Bob_, can be invited by admins, like _Alice_, to use it securely with their Tide account. Your web users enjoy provably-secure Tide accounts, with their identity and access-credentials sitting outside of anyone's reach.
+* Your web users can sign in to your app, be served customized content to authenticated and unauthenticated users and based on their predefined roles.
+* Your web users' roles and permissions are managed locally on your very own self-hosted instance of TideCloak - one of the most robust, powerful and feature-rich Identity and Access Management system which you have downloaded, installed, configured and deployed locally.
+* Your TideCloak realm ("_nextjs-test_") is secured by the global Tide Cybersecurity Fabric that you have activated and licensed.
+* Your realm's authority key, the VVK, is secured, out of anyone's reach, by Tide Cybersecurity Fabric, such that even if your administrators, your TideCloak's instance, its source code or even our staff at Tide get compromised, still no one can ever get a hold of it.
+* Changes to the realm's users access rights (e.g. roles, settings, clients) can be drafted by any of the realm's Tide-secured admins, but only go into affect after the rightful quorum of admins reviewed, agreed and committed it. No one can manipulate or bypass that process.
+* Your web users sensitive date-of-birth field is hermetically secure at rest and in transit, by a key that is literally out of anyone's reach (Including administrators. Including us), and is unlocked only to the authorized users (themselves) at the edge device, on their browser.
 
 ### **For our supported access to these capabilities, [sign up to our free Beta Program](https://tide.org/beta)**
 
@@ -307,7 +307,11 @@ To guarantee the user remains connected and properly served while preventing a m
 
 ## Authorized decryption flow
 
-Although it's not mandatory, it is assumed that end-to-end-encryption (E2EE) flows are served from a protected page. This code example, that is showcasing a standard scenario to decrypt a sensitive user Date-of-Birth field in a form, protects access to the form as described above on how to protect `protected.js` page: navigating with a valid JWT as a bearer token and validating the JWT in back-end's `middleware.js` script. Without these, the page wouldn't even load. The E2EE flow only starts from that point:
+Although it's not mandatory, it is assumed that end-to-end-encryption (E2EE) flows are served from a protected page. This code example, that is showcasing a standard scenario to decrypt a sensitive user Date-of-Birth field in a form, protects access to the form as described above on how to protect `protected.js` page: navigating with a valid JWT as a bearer token and validating the JWT in back-end's `middleware.js` script. Without these, the page wouldn't even load. 
+
+<img src="ax/nextjs-e2ee-authdecrypt.drawio.svg" alt="Decryption flow" title="Authorized decryption flow" width=100%>
+
+The E2EE flow only starts from that point:
 
 1. User requests to load the dob.js form.
 2. The `dob.js` form is loaded and the date-of-birth field is being requested from the `retrieve.js` endpoint at the backend. That request bears the user's access token.
@@ -317,15 +321,12 @@ Although it's not mandatory, it is assumed that end-to-end-encryption (E2EE) flo
 6. The script on the user-agent (browser) performs a request to the swarm in Tide Security Fabric that is responsible for that authority key, using a similar (but not identical) access token.
 7. Each Tide node in that authority key's swarm performs a validation of the access token, making sure that Tide-authenticated user-session holds a cryptographically-assured access roles for this particular field - and if so, performs a multi-party decryption on that field. The garbled replies from all the swarm's nodes are being interpolated on the user's browser to finalize the decryption process, and present the date-of-birth clear-text field for the user.
 
-<img src="ax/nextjs-e2ee-authdecrypt.drawio.svg" alt="Decryption flow" title="Authorized decryption flow" width=100%>
-
 ## Authorized encryption flow
+
+<img src="ax/nextjs-e2ee-authencrypt.drawio.svg" alt="Encryption flow" title="Authorized encryption flow" width=100%>
 
 1. Once a user made a change in the Tide-defined sensitive field, the date-of-birth, the user-agent browser communicates with the authority's keys swarm.
 2. Each of the swarm nodes performs validation of the user and the field and to finalize the authenticated-encryption of that field before sending it back.
 3. Once encrypted, the form is posted to the backend, as a standard HTTP POST request, with the date-of-birth field encrypted.
 4. The form details are being sent to the backend, where it all being validated.
 5. Once validated, the backend stores the field in the database in its encrypted form - with no key stored in the system.
-
-<img src="ax/nextjs-e2ee-authencrypt.drawio.svg" alt="Encryption flow" title="Authorized encryption flow" width=100%>
-
