@@ -132,7 +132,7 @@ To secure your realm against the highest cyber-threat, compromised-insider, set 
 For a quick-guide, follow these steps:
 
 1. **Realm settings** menu → [General](http://localhost:8080/admin/master/console/#/nextjs-test/realm-settings/general) → **Identity Governance and Administration** : *On*
-2. **Users** menu → [Add User](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user) → **Username**: _alice_ , **Email**: _alice@email.here_ → `Create`
+2. **Users** menu → [Create new user](http://localhost:8080/admin/master/console/#/nextjs-test/users/add-user) → **Username**: _alice_ , **Email**: _alice@email.here_ → `Create`
 3. **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users)** menu → **alice** user → **Credentials** tab → `Credential Reset` link → **Reset action** : _Link Tide Account_ → `Copy Link` button
 4. Paste the link in a new (or private) browser and follow the instructions on screen to associate an existing or a new Tide account to Alice's account. Once associated, close that browser when done.
 5. Return to the realm administration: **[Users](http://localhost:8080/admin/master/console/#/nextjs-test/users)** menu → **alice** user → **Role Mapping** tab → **Assign Role** → _tide-realm-admin_ : `Assign`
