@@ -4,12 +4,11 @@ import { verifyTideCloakToken } from '/lib/tideJWT';
 // This endpoint is validating that only a specific role will be authorised to access the data
 const AllowedRole = 'offline_access';
 
-export default async function handler(req, res) {
-
-  const authHeader = req.headers.authorization;
-
+export async function POST(request) {
+  const authHeader = request.headers.get("authorization");
+  
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized: Missing or invalid token' });
+    return new Response(JSON.stringify({error: 'Unauthorized: Missing or invalid token'}), {status: 401});
   }
 
   const token = authHeader.split(' ')[1];
@@ -18,13 +17,13 @@ export default async function handler(req, res) {
     const user = await verifyTideCloakToken(token, AllowedRole);
 
     if (!user) {
-      return res.status(403).json({ error: 'Forbidden: Invalid token or role' });
+      return new Response(JSON.stringify({ error: 'Forbidden: Invalid token or role'}), {status: 403}) 
     }
 
-    res.status(200).json({ vuid: user.vuid, userkey: user.tideuserkey });
+    return new Response(JSON.stringify({ vuid: user.vuid, userkey: user.tideuserkey }), {status:200});
 
   } catch (error) {
     console.error('Token verification failed:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {status: 500});
   }
 }
