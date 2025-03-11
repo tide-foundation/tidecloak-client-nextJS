@@ -1,3 +1,6 @@
+"use client"
+
+// Equivalent to Page Router's index.js file.
 // Home page
 
 import React, { useEffect } from "react";

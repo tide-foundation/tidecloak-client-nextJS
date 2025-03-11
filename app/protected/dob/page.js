@@ -1,3 +1,5 @@
+"use client"
+
 // This is example for a secure (authenticated user only) page.
 // In this example, an authenticated user will be presented some sensitive data 
 // and will be allowed to query the server for sensitive information.
@@ -25,19 +27,19 @@ export default function DobPage() {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
     IAMService.initIAM(() => {
       if (IAMService.isLoggedIn()) {
-    // An example on collecting user information to peform client side operations (i.e. display)
+        // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
+        // Fetch dob from DB if its there
+        fetchEncryptedDob();
       }
     });
-
-    // Fetch dob from DB if its there
-    fetchEncryptedDob();
   }, []);
 
   const handleLogout = () => {
     // Allow and handle user log out
     IAMService.doLogout();
   };
+
   const fetchEncryptedDob = async () => {
     setLoading(true);
     const newToken = await IAMService.getToken();
@@ -48,40 +50,52 @@ export default function DobPage() {
           Authorization: `Bearer ${newToken}`, // Add the token to the Authorization header
         }
       });
+
     const dob = JSON.parse(await resp.text()).dob;
     if(!dob) setDob("01/01/1970")
     else{
       setEncDoBField(dob);
-      // decrypt
+      
+      // decrypt - returned in an array
       const decryptedDob = await IAMService.doDecrypt([
         {
           "encrypted": dob,
           "tags": ["dob"]
         }
       ]);
-      setDob(decryptedDob);
+
+      if (dob[0]) {
+        setDob(decryptedDob[0]);
+      } else {
+        setDob(decryptedDob);
+      }
     }
     setLoading(false);
   }
 
   const encrypt = async (e) => {
     setLoading(true);
+    const newToken = await IAMService.getToken();
+    
     const encryptedDob = await IAMService.doEncrypt([
         {
             "data": dob,
             "tags": ["dob"]
         }
     ])
-
+    
     const response = await fetch('/api/store', {
         method: 'POST',
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${await IAMService.getToken()}`, // Add the token to the Authorization header
+          Authorization: `Bearer ${newToken}`, // Add the token to the Authorization header
         },
         body: encryptedDob[0]
     });
+
     const resp = await response.text();
+    console.log(resp);
+
     setEncDoBField(encryptedDob);
     setLoading(false);
   }
@@ -95,7 +109,6 @@ export default function DobPage() {
         <p>Please wait. Loading...</p>
         </> : 
         <>
-        
         <label>
             Your date of birth:
             <input
@@ -106,7 +119,6 @@ export default function DobPage() {
             <button onClick={encrypt}>Encrypt</button>
 			<p><strong>Encrypted DoB:</strong></p><textarea readOnly={true} value={encDoBField} rows="1" cols="25" />
       </>}
-      
       <p/>
       <Link href="/protected">Go back to protected home page</Link>
       <p>

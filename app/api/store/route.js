@@ -1,37 +1,33 @@
 // This is an example for an API endpoint that serves sensitive information for an authenticated user's session
-import { AddDOB, GetDOB } from '../../lib/db';
+import { AddDOB } from '../../../lib/db';
 import { verifyTideCloakToken } from '/lib/tideJWT';
 
 // This endpoint is validating that only a specific role will be authorised to access the data
 const AllowedRole = '_tide_dob.selfencrypt';
  
-export default async function handler(req, res) {
-
-  const authHeader = req.headers.authorization;
+export async function POST(request) {
+  const authHeader = request.headers.get("authorization");
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Unauthorized: Missing or invalid token' });
+    return new Response(JSON.stringify({ error: 'Unauthorized: Missing or invalid token' }), {status: 401});
   }
 
   const token = authHeader.split(' ')[1];
 
   try {
-	  
     const user = await verifyTideCloakToken(token, AllowedRole);
 
     if (!user) {
-      return res.status(403).json({ error: 'Forbidden: Invalid token or role' });
+      return new Response(JSON.stringify({ error: 'Forbidden: Invalid token or role' }), {status: 403});
     }
 
-    try{
-      const dob = await GetDOB(user.vuid, req.body);
-      res.status(200).json({dob: dob});
-    }catch{
-      res.status(200).json({dob:null})
-    }
+    const data = await request.text();
+
+    await AddDOB(user.vuid, data);
+    return new Response(JSON.stringify({ ok: 200 }), {status: 200});
 
   } catch (error) {
     console.error('Token verification failed:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {status: 500});
   }
 }

@@ -1,3 +1,5 @@
+"use client"
+
 // This is example for a secure (authenticated user only) page.
 // In this example, an authenticated user will be presented some sensitive data 
 // and will be allowed to query the server for sensitive information.
@@ -18,7 +20,7 @@ export default function ProtectedPage() {
     IAMService.initIAM(() => {
       setLoading(false);
       if (IAMService.isLoggedIn()) {
-	// An example on collecting user information to peform client side operations (i.e. display)
+	      // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
         setHasUMARole(IAMService.hasOneRole( 'uma_authorization' ));
       }
