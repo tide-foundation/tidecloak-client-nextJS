@@ -214,7 +214,7 @@ Let's review what just happened and what you've just accomplished:
 * Changes to the realm's users access rights (e.g. roles, settings, clients) can be drafted by any of the realm's Tide-secured admins, but only go into affect after the rightful quorum of admins reviewed, agreed and committed it. No one can manipulate or bypass that process.
 * Your web users sensitive date-of-birth field is hermetically secure at rest and in transit, by a key that is literally out of anyone's reach (Including administrators. Including us), and is unlocked only to the authorized users (themselves) at the edge device, on their browser.
 
-### **For our supported access to these capabilities, [sign up to our free Beta Program](https://tide.org/beta)**
+### **For our supported access to these capabilities, [sign up to our free Alpha Program](https://tide.org/alpha)**
 
 
 # How does it work?
