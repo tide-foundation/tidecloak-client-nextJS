@@ -1,3 +1,5 @@
+🚀 [Try the 2 x click setup in Codespaces](https://github.com/tide-foundation/tidecloakspaces)
+
 # Securing applications using Next.JS and TideCloak
 
 So, you want to build the best digital platforms on the planet, without the burden of worrying about security, and simultaneously grant your users sovereignty over their identities? Great!
