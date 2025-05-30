@@ -2,11 +2,9 @@
 
 import React, { useEffect } from "react";
 import IAMService from "/lib/IAMService";
-import { useAppContext } from "../context/context";
 
 // If user authenticated but without proper credentials, present this page
 export default function FailedPage() {
-  const {authenticated} = useAppContext();
   
   const handleLogout = () => {
     // Allow user to log out and start over

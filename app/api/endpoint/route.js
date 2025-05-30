@@ -4,6 +4,9 @@ import { verifyTideCloakToken } from '/lib/tideJWT';
 // This endpoint is validating that only a specific role will be authorised to access the data
 const AllowedRole = 'offline_access';
 
+// base URL from the local .env (http://localhost:3000)
+const origin = process.env.BASE_URL;
+
 export async function POST(request) {
   const authHeader = request.headers.get("authorization");
   
@@ -14,7 +17,7 @@ export async function POST(request) {
   const token = authHeader.split(' ')[1];
 
   try {
-    const user = await verifyTideCloakToken(token, AllowedRole);
+    const user = await verifyTideCloakToken(origin, token, AllowedRole);
 
     if (!user) {
       return new Response(JSON.stringify({ error: 'Forbidden: Invalid token or role'}), {status: 403}) 

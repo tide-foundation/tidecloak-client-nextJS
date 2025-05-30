@@ -14,21 +14,20 @@ export default function ProtectedPage() {
   const [hasUMARole, setHasUMARole] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const {authenticated} = useAppContext();
  
   useEffect(() => {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
     setLoading(true);
    
-      setLoading(false);
-      if (IAMService.isLoggedIn()) {
+      if (authenticated) {
 	      // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
         setHasUMARole(IAMService.hasOneRole( 'uma_authorization' ));
+        setLoading(false);
       }
  
-  }, []);
+  }, [authenticated]);
 
   const handleLogout = () => {
     // Allow and handle user log out

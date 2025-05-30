@@ -27,16 +27,18 @@ export default function DobPage() {
   const {authenticated} = useAppContext();
 
   useEffect(() => {
+    setLoading(true);
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
  
-      if (IAMService.isLoggedIn()) {
+      if (authenticated) {
         // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
         // Fetch dob from DB if its there
         fetchEncryptedDob();
+        setLoading(false);
       }
   
-  }, []);
+  }, [authenticated]);
 
   const handleLogout = () => {
     // Allow and handle user log out

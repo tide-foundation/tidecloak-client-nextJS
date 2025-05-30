@@ -11,6 +11,7 @@ const routesRoles = [
 ];
 
 export async function middleware(req) {
+
   const { pathname } = req.nextUrl;
   
   var requiredRole = null;
@@ -38,7 +39,8 @@ export async function middleware(req) {
       return NextResponse.redirect(new URL("/", req.url));
     }
 
-    const user = await verifyTideCloakToken(token, requiredRole);
+    const origin = process.env.SYSTEM_URL_OVERRIDE ?? req.nextUrl.origin;
+    const user = await verifyTideCloakToken(origin, token, requiredRole);
     
     if (user) {
   	  return NextResponse.next();
@@ -47,7 +49,7 @@ export async function middleware(req) {
     throw "Token verification failed.";
   } catch (err) {
 	console.error("[Middleware] ", err);
-    return NextResponse.redirect(new URL("/fail", req.url));
+    return NextResponse.redirect(new URL("/auth/redirect", req.url));
   }
   
 }
