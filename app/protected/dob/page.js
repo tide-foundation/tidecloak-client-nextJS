@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import IAMService from "/lib/IAMService";
 import Link from "next/link";
 import { Buffer } from "buffer";
+import { useAppContext } from "../../context/context";
  
 //function toHexString(byteArray) {
 //    return Array.from(byteArray, function(byte) {
@@ -23,16 +24,18 @@ export default function DobPage() {
   const [loading, setLoading] = useState(false);
   const [encDoBField, setEncDoBField] = useState('unavailable');
 
+  const {authenticated} = useAppContext();
+
   useEffect(() => {
     // Re-init Keycloak in the browser (to read token, handle logout, etc.)
-    IAMService.initIAM(() => {
+ 
       if (IAMService.isLoggedIn()) {
         // An example on collecting user information to peform client side operations (i.e. display)
         setUsername(IAMService.getName() || "unknown-user");
         // Fetch dob from DB if its there
         fetchEncryptedDob();
       }
-    });
+  
   }, []);
 
   const handleLogout = () => {

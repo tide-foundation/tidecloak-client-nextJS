@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": false,
   "dependencies": {
-    "jose": "^5.9.6",
-    "next": "^15.1.6",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "jose": "^6.0.11",
+    "next": "^15.3.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "buffer": "6.0.3",
     "sqlite3": "5.1.7",
     "sqlite": "5.1.1",
-    "tidecloak-js": "^0.7.1"
+    "tidecloak-js": "0.7.2"
   },
   "scripts": {
     "dev": "next dev",

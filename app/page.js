@@ -5,16 +5,19 @@
 
 import React, { useEffect } from "react";
 import IAMService from "/lib/IAMService";
+import { useAppContext } from "./context/context";
 
 export default function HomePage() {
+
+  const {authenticated} = useAppContext();
+
   // Check in background if user already authenticated
   useEffect(() => {
-    IAMService.initIAM((authenticated) => {
-      if (authenticated) {
-        // If already authenticated, skip screen
-        window.location.href = "/auth/redirect";
-      }
-    });
+    if (authenticated) {
+      // If already authenticated, skip screen
+      window.location.href = "/auth/redirect";
+    }
+   
   }, []);
 
   const handleLogin = () => {
