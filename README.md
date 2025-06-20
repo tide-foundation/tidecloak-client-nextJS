@@ -16,7 +16,7 @@ cd tidecloak-client-nextJS
 sudo docker run \
   -d \
   -v .:/opt/keycloak/data/h2 \
-  -v ./test-realm.json:/opt/keycloak/data/import/test-realm.json \
+  -v ./nextjs-test-realm.json:/opt/keycloak/data/import/nextjs-test-realm.json \
   --name tidecloak \
   -p 8080:8080 \
   -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
@@ -71,13 +71,13 @@ This can also be done by either:
 ## B. Getting TideCloak up and running
 
 TideCloak can be deployed locally, you can host it, or you can have a fully managed instance on [SkyCloak](http://skycloak.io). In this guide, we'll show you how to deploy a dev-mode docker instance locally.
-Start a TideCloak-Dev docker container that already includes all the basic configuration and settings to get you going. To get it, open your Docker/WSL/Linux terminal and run the following command from the root folder of this project (where test-realm.json is):
+Start a TideCloak-Dev docker container that already includes all the basic configuration and settings to get you going. To get it, open your Docker/WSL/Linux terminal and run the following command from the root folder of this project (where nextjs-test-realm.json is):
 
 ```bash
 sudo docker run \
   -d \
   -v .:/opt/keycloak/data/h2 \
-  -v ./test-realm.json:/opt/keycloak/data/import/test-realm.json \
+  -v ./nextjs-test-realm.json:/opt/keycloak/data/import/nextjs-test-realm.json \
   --name tidecloak \
   -p 8080:8080 \
   -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
