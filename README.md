@@ -26,7 +26,7 @@ npm install
 ```
 Activate license by [Manage License](http://localhost:8080/admin/master/console/#/nextjs-test/identity-providers/tide/tide/settings) then `Request License`.
 
-Get settings by [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) → _myclient_ → _Action_ → `Download adapter config` and put it inside `tidecloak.json`.
+Get settings by [Clients](http://localhost:8080/admin/master/console/#/nextjs-test/clients) → _myclient_ → _Action_ → `Download adapter config` and put it inside `/data/tidecloak.json`.
 ```bash
 npm run dev
 ```
