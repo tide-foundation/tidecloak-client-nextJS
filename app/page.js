@@ -1,29 +1,44 @@
+"use client"
+
+// Equivalent to Page Router's index.js file.
 // Home page
 
 import React, { useEffect } from "react";
-import IAMService from "/lib/IAMService";
+import { useTideCloak } from "@tidecloak/nextjs";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+
+  const {authenticated, loading, login} = useTideCloak();
+  const router = useRouter();
+
   // Check in background if user already authenticated
   useEffect(() => {
-    IAMService.initIAM((authenticated) => {
+    if (!loading){
       if (authenticated) {
         // If already authenticated, skip screen
-        window.location.href = "/auth/redirect";
+        router.push("/auth/redirect");
       }
-    });
-  }, []);
+    }
+    
+  }, [authenticated]);
 
   const handleLogin = () => {
     // Display and handle a login button
-    IAMService.doLogin();
+    login();
   };
 
   return (
+    !loading
+    ?
     <div>
       <h1>Welcome to My App</h1>
       <p>This is a public page. Please log in to access protected content.</p>
       <button onClick={handleLogin}>Login</button>
+    </div>
+    :
+    <div>
+      <>Waiting for context to load...</>
     </div>
   );
 }
