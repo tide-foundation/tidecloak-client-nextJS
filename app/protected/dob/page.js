@@ -4,11 +4,9 @@
 // In this example, an authenticated user will be presented some sensitive data 
 // and will be allowed to query the server for sensitive information.
 
-import React, { useEffect, useState } from "react";
-import IAMService from "/lib/IAMService";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Buffer } from "buffer";
-import { useAppContext } from "../../context/context";
+import { useTideCloak } from "@tidecloak/nextjs";
  
 //function toHexString(byteArray) {
 //    return Array.from(byteArray, function(byte) {
@@ -17,14 +15,15 @@ import { useAppContext } from "../../context/context";
 //  }
 
 export default function DobPage() {
+  const { getValueFromIdToken, token, logout, doDecrypt, doEncrypt} = useTideCloak();
   const [username, setUsername] = useState("unknown");
   const [hasEncrypted, setHasEncrypted] = useState(false);
   const [apiResponse, setApiResponse] = useState(null);
-  const [dob, setDob] = useState('unavailable');
+  const [dob, setDob] = useState(undefined);
   const [loading, setLoading] = useState(false);
-  const [encDoBField, setEncDoBField] = useState('unavailable');
+  const [encDoBField, setEncDoBField] = useState('undefined');
 
-  const {authenticated} = useAppContext();
+  const {authenticated} = useTideCloak();
 
   useEffect(() => {
     setLoading(true);
@@ -32,7 +31,7 @@ export default function DobPage() {
  
       if (authenticated) {
         // An example on collecting user information to peform client side operations (i.e. display)
-        setUsername(IAMService.getName() || "unknown-user");
+        setUsername(getValueFromIdToken("preferred_username") || "unknown-user");
         // Fetch dob from DB if its there
         fetchEncryptedDob();
         setLoading(false);
@@ -42,17 +41,16 @@ export default function DobPage() {
 
   const handleLogout = () => {
     // Allow and handle user log out
-    IAMService.doLogout();
+    logout();
   };
 
   const fetchEncryptedDob = async () => {
     setLoading(true);
-    const newToken = await IAMService.getToken();
     const resp = await fetch('/api/retrieve', {
         method: 'GET',
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${newToken}`, // Add the token to the Authorization header
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
         }
       });
 
@@ -62,7 +60,7 @@ export default function DobPage() {
       setEncDoBField(dob);
       
       // decrypt - returned in an array
-      const decryptedDob = await IAMService.doDecrypt([
+      const decryptedDob = await doDecrypt([
         {
           "encrypted": dob,
           "tags": ["dob"]
@@ -79,10 +77,8 @@ export default function DobPage() {
   }
 
   const encrypt = async (e) => {
-    setLoading(true);
-    const newToken = await IAMService.getToken();
-    
-    const encryptedDob = await IAMService.doEncrypt([
+    setLoading(true);    
+    const encryptedDob = await doEncrypt([
         {
             "data": dob,
             "tags": ["dob"]
@@ -93,13 +89,12 @@ export default function DobPage() {
         method: 'POST',
         headers: {
           accept: 'application/json',
-          Authorization: `Bearer ${newToken}`, // Add the token to the Authorization header
+          Authorization: `Bearer ${token}`, // Add the token to the Authorization header
         },
         body: encryptedDob[0]
     });
 
     const resp = await response.text();
-    console.log(resp);
 
     setEncDoBField(encryptedDob);
     setLoading(false);
@@ -117,12 +112,12 @@ export default function DobPage() {
         <label>
             Your date of birth:
             <input
-                value={dob} // ...force the input's value to match the state variable...
+                value={dob ?? "unavailable"} // ...force the input's value to match the state variable...
                 onChange={e => setDob(e.target.value)} // ... and update the state variable on any edits!
             />
             </label>
             <button onClick={encrypt}>Encrypt</button>
-			<p><strong>Encrypted DoB:</strong></p><textarea readOnly={true} value={encDoBField} rows="1" cols="25" />
+			<p><strong>Encrypted DoB:</strong></p><textarea readOnly={true} value={encDoBField ?? "unavailable"} rows="1" cols="25" />
       </>}
       <p/>
       <Link href="/protected">Go back to protected home page</Link>

@@ -1,14 +1,13 @@
 "use client"
 
-import React, { useEffect } from "react";
-import IAMService from "/lib/IAMService";
+import { useTideCloak } from "@tidecloak/nextjs";
 
 // If user authenticated but without proper credentials, present this page
 export default function FailedPage() {
-  
+  const { logout } = useTideCloak();
   const handleLogout = () => {
     // Allow user to log out and start over
-    IAMService.doLogout();
+    logout();
   };
 
   return (

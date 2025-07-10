@@ -4,18 +4,17 @@
 // Home page
 
 import React, { useEffect } from "react";
-import IAMService from "/lib/IAMService";
-import { useAppContext } from "./context/context";
+import { useTideCloak } from "@tidecloak/nextjs";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
 
-  const {authenticated, contextLoading} = useAppContext();
+  const {authenticated, loading, login} = useTideCloak();
   const router = useRouter();
 
   // Check in background if user already authenticated
   useEffect(() => {
-    if (!contextLoading){
+    if (!loading){
       if (authenticated) {
         // If already authenticated, skip screen
         router.push("/auth/redirect");
@@ -26,11 +25,11 @@ export default function HomePage() {
 
   const handleLogin = () => {
     // Display and handle a login button
-    IAMService.doLogin();
+    login();
   };
 
   return (
-    !contextLoading
+    !loading
     ?
     <div>
       <h1>Welcome to My App</h1>

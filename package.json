@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "private": false,
   "dependencies": {
+    "@tidecloak/nextjs": "file:../tidecloak-js/packages/tidecloak-nextjs/tidecloak-nextjs-0.0.1.tgz",
+    "buffer": "6.0.3",
     "jose": "^6.0.11",
     "next": "^15.3.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "buffer": "6.0.3",
-    "sqlite3": "5.1.7",
     "sqlite": "5.1.1",
-    "tidecloak-js": "0.7.2"
+    "sqlite3": "5.1.7"
   },
   "scripts": {
     "dev": "next dev",
