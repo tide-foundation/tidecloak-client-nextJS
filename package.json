@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "dependencies": {
-    "@tidecloak/nextjs": "file:../tidecloak-js/packages/tidecloak-nextjs/tidecloak-nextjs-0.0.1.tgz",
+    "@tidecloak/nextjs": "^0.9.11",
     "buffer": "6.0.3",
     "jose": "^6.0.11",
     "next": "^15.3.2",
