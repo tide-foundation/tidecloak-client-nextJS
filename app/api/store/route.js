@@ -1,7 +1,7 @@
 // This is an example for an API endpoint that serves sensitive information for an authenticated user's session
 import { AddDOB } from '../../../lib/db';
 import { verifyTideCloakToken } from '@tidecloak/nextjs/server';
-import tcConfig from '../../../tcConfig.json'
+import tcConfig from '../../../tidecloak.json'
 
 // This endpoint is validating that only a specific role will be authorised to access the data
 const AllowedRole = '_tide_dob.selfencrypt';

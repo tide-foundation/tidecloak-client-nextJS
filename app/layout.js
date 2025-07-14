@@ -2,7 +2,7 @@
 // Ideal for persisting a Navigation interface that doesn't rerender.
 'use client'
 import { TideCloakProvider } from "@tidecloak/nextjs"
-import tcConfig from "../tcConfig.json"
+import tcConfig from "../tidecloak.json"
 
 export default function RootLayout({ children }) {
   return (

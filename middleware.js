@@ -1,7 +1,7 @@
 // an example nextJS middleware router that does server-side validation on all traffic to secure pages
 import { NextResponse } from "next/server";
 import { createTideCloakMiddleware } from "@tidecloak/nextjs/server";
-import tcConfig from "./tcConfig.json";
+import tcConfig from "./tidecloak.json";
 
 // Developer should list all secure pages and their respective allowed roles
 export default createTideCloakMiddleware({
